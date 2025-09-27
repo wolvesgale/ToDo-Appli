@@ -22,13 +22,17 @@ export const useAuth = (): UseAuthReturn => {
   // 認証状態を確認
   const checkAuth = useCallback(async () => {
     try {
+      console.log('🔍 認証状態を確認中...');
       const authState = getAuthState();
+      console.log('📋 取得した認証状態:', authState);
       setUser(authState?.user || null);
+      console.log('👤 ユーザー状態更新:', authState?.user || null);
     } catch (error) {
-      console.error('認証確認エラー:', error);
+      console.error('❌ 認証確認エラー:', error);
       setUser(null);
     } finally {
       setLoading(false);
+      console.log('✅ 認証状態確認完了');
     }
   }, []);
 

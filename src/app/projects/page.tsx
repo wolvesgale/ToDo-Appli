@@ -20,21 +20,30 @@ interface Project {
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [projectsLoading, setProjectsLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newProject, setNewProject] = useState({
     name: '',
     description: ''
   });
   
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, loading: authLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
+    // 認証状態の読み込み中は何もしない
+    if (authLoading) {
+      return;
+    }
+    
+    // 読み込み完了後、認証されていない場合のみリダイレクト
     if (!isAuthenticated) {
+      console.log('🚫 認証されていません。ログインページにリダイレクトします');
       router.push('/auth/login');
       return;
     }
+    
+    console.log('✅ 認証済みユーザー:', user);
 
     // モックデータを読み込み
     const mockProjects: Project[] = [
@@ -72,9 +81,9 @@ export default function ProjectsPage() {
 
     setTimeout(() => {
       setProjects(mockProjects);
-      setLoading(false);
+      setProjectsLoading(false);
     }, 1000);
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, authLoading, user, router]);
 
   const handleCreateProject = async () => {
     if (!newProject.name.trim()) return;
@@ -108,7 +117,7 @@ export default function ProjectsPage() {
     }
   };
 
-  if (loading) {
+  if (authLoading || projectsLoading) {
     return (
       <Layout>
         <div className="flex items-center justify-center min-h-screen">
