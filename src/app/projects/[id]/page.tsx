@@ -22,7 +22,7 @@ interface Project {
 export default function ProjectDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, loading: authLoading } = useAuth();
   
   const [project, setProject] = useState<Project | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -42,10 +42,19 @@ export default function ProjectDetailPage() {
   const projectId = params.id as string;
 
   useEffect(() => {
+    // 認証状態の読み込み中は何もしない
+    if (authLoading) {
+      return;
+    }
+    
+    // 読み込み完了後、認証されていない場合のみリダイレクト
     if (!isAuthenticated) {
+      console.log('🚫 認証されていません。ログインページにリダイレクトします');
       router.push('/auth/login');
       return;
     }
+    
+    console.log('✅ 認証済みユーザー:', user);
 
     // モックデータを読み込み
     const mockProject: Project = {
@@ -116,7 +125,7 @@ export default function ProjectDetailPage() {
       setTasks(mockTasks);
       setLoading(false);
     }, 1000);
-  }, [isAuthenticated, router, projectId]);
+  }, [isAuthenticated, authLoading, user, router, projectId]);
 
   const handleCreateTask = async () => {
     if (!newTask.title.trim()) return;

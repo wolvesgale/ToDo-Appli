@@ -31,7 +31,7 @@ interface ProjectMember {
 export default function ProjectSettingsPage() {
   const params = useParams();
   const router = useRouter();
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, loading: authLoading } = useAuth();
   
   const [project, setProject] = useState<Project | null>(null);
   const [members, setMembers] = useState<ProjectMember[]>([]);
@@ -69,10 +69,19 @@ export default function ProjectSettingsPage() {
   };
 
   useEffect(() => {
+    // 認証状態の読み込み中は何もしない
+    if (authLoading) {
+      return;
+    }
+    
+    // 読み込み完了後、認証されていない場合のみリダイレクト
     if (!isAuthenticated) {
+      console.log('🚫 認証されていません。ログインページにリダイレクトします');
       router.push('/auth/login');
       return;
     }
+    
+    console.log('✅ 認証済みユーザー:', user);
 
     // モックデータを読み込み
     const mockProject: Project = {
@@ -130,7 +139,7 @@ export default function ProjectSettingsPage() {
       setMembers(mockMembers);
       setLoading(false);
     }, 1000);
-  }, [isAuthenticated, router, projectId]);
+  }, [isAuthenticated, authLoading, user, router, projectId]);
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};

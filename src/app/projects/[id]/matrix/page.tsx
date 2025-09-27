@@ -25,10 +25,10 @@ interface MatrixQuadrant {
   urgency: 'high' | 'low';
 }
 
-export default function MatrixPage() {
+export default function ProjectMatrixPage() {
   const params = useParams();
   const router = useRouter();
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, loading: authLoading } = useAuth();
   
   const [project, setProject] = useState<Project | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -92,10 +92,19 @@ export default function MatrixPage() {
   ];
 
   useEffect(() => {
+    // 認証状態の読み込み中は何もしない
+    if (authLoading) {
+      return;
+    }
+    
+    // 読み込み完了後、認証されていない場合のみリダイレクト
     if (!isAuthenticated) {
+      console.log('🚫 認証されていません。ログインページにリダイレクトします');
       router.push('/auth/login');
       return;
     }
+    
+    console.log('✅ 認証済みユーザー:', user);
 
     // モックデータを読み込み
     const mockProject: Project = {
@@ -181,7 +190,7 @@ export default function MatrixPage() {
       setTasks(mockTasks);
       setLoading(false);
     }, 1000);
-  }, [isAuthenticated, router, projectId]);
+  }, [isAuthenticated, authLoading, user, router, projectId]);
 
   const getTasksByQuadrant = (quadrant: MatrixQuadrant) => {
     return tasks.filter(task => 

@@ -92,7 +92,7 @@ export const useAuth = (): UseAuthReturn => {
   // 初期化時に認証状態を確認
   useEffect(() => {
     checkAuth();
-  }, [checkAuth]);
+  }, []); // checkAuthを依存配列から削除して無限ループを防ぐ
 
   return {
     user,

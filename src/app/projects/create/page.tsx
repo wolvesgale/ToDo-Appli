@@ -18,7 +18,7 @@ interface ProjectTemplate {
 
 export default function CreateProjectPage() {
   const router = useRouter();
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, loading: authLoading } = useAuth();
   
   const [formData, setFormData] = useState({
     name: '',
@@ -127,10 +127,20 @@ export default function CreateProjectPage() {
   ];
 
   React.useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/auth/login');
+    // 認証状態の読み込み中は何もしない
+    if (authLoading) {
+      return;
     }
-  }, [isAuthenticated, router]);
+    
+    // 読み込み完了後、認証されていない場合のみリダイレクト
+    if (!isAuthenticated) {
+      console.log('🚫 認証されていません。ログインページにリダイレクトします');
+      router.push('/auth/login');
+      return;
+    }
+    
+    console.log('✅ 認証済みユーザー:', user);
+  }, [isAuthenticated, authLoading, user, router]);
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
