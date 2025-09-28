@@ -514,13 +514,25 @@ export default function ProjectMatrixPage() {
   const filteredTargets = matrixData.targets.filter(target => !target.archived);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="bg-white shadow-sm border-b">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <div className="bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">プロジェクトマトリクス</h1>
-              <p className="mt-1 text-sm text-gray-500">工程と対象者の進捗管理</p>
+            <div className="flex items-center space-x-4">
+              <Button 
+                onClick={() => router.push('/projects')} 
+                variant="outline"
+                className="flex items-center space-x-2"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                <span>プロジェクト一覧</span>
+              </Button>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">プロジェクトマトリクス</h1>
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">工程と対象者の進捗管理</p>
+              </div>
             </div>
             <div className="flex space-x-4">
               <Button onClick={() => setShowAddStage(true)}>
@@ -539,24 +551,24 @@ export default function ProjectMatrixPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-6 flex items-center space-x-4">
-          <label className="flex items-center">
+          <label className="flex items-center text-gray-700 dark:text-gray-300">
             <input
               type="checkbox"
               checked={viewState.showCompletedTasks}
               onChange={(e) => setViewState(prev => ({ ...prev, showCompletedTasks: e.target.checked }))}
-              className="mr-2"
+              className="mr-2 rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 dark:bg-gray-700"
             />
             完了済みタスクを表示
           </label>
         </div>
 
         <DragDropContext onDragEnd={handleDragEnd}>
-          <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead className="bg-gray-50 dark:bg-gray-700">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-0 bg-gray-50 z-10">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider sticky left-0 bg-gray-50 dark:bg-gray-700 z-10">
                       工程 / 対象者
                     </th>
                     <Droppable droppableId="targets" direction="horizontal" type="target">
@@ -574,29 +586,29 @@ export default function ProjectMatrixPage() {
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
-                                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200 min-w-[200px]"
+                                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider border-r border-gray-200 dark:border-gray-600 min-w-[200px] w-[200px]"
                                   >
                                     <div className="flex items-center justify-between">
                                       <div>
-                                        <div className="font-semibold">{target.name}</div>
-                                        <div className="text-gray-400">{target.email}</div>
+                                        <div className="font-semibold text-gray-900 dark:text-gray-100">{target.name}</div>
+                                        <div className="text-gray-400 dark:text-gray-500">{target.email}</div>
                                       </div>
                                       <div className="flex space-x-1">
                                         <button
                                           onClick={() => handleEditTarget(target)}
-                                          className="text-blue-600 hover:text-blue-800"
+                                          className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
                                         >
                                           編集
                                         </button>
                                         <button
                                           onClick={() => handleArchiveTarget(target.id)}
-                                          className="text-yellow-600 hover:text-yellow-800"
+                                          className="text-yellow-600 hover:text-yellow-800 dark:text-yellow-400 dark:hover:text-yellow-300"
                                         >
                                           {target.archived ? '復元' : 'アーカイブ'}
                                         </button>
                                         <button
                                           onClick={() => handleDeleteTarget(target.id)}
-                                          className="text-red-600 hover:text-red-800"
+                                          className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
                                         >
                                           削除
                                         </button>
@@ -613,7 +625,7 @@ export default function ProjectMatrixPage() {
                     </Droppable>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                   <Droppable droppableId="stages" type="stage">
                     {(provided) => (
                       <div ref={provided.innerRef} {...provided.droppableProps}>
@@ -623,24 +635,24 @@ export default function ProjectMatrixPage() {
                               <tr
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
-                                className="hover:bg-gray-50"
+                                className="hover:bg-gray-50 dark:hover:bg-gray-700"
                               >
                                 <td
                                   {...provided.dragHandleProps}
-                                  className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white border-r border-gray-200"
+                                  className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100 sticky left-0 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-600"
                                 >
                                   <div className="flex items-center justify-between">
                                     <span>{stage.name}</span>
                                     <div className="flex space-x-1">
                                       <button
                                         onClick={() => handleEditStage(stage)}
-                                        className="text-blue-600 hover:text-blue-800"
+                                        className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
                                       >
                                         編集
                                       </button>
                                       <button
                                         onClick={() => handleDeleteStage(stage.id)}
-                                        className="text-red-600 hover:text-red-800"
+                                        className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
                                       >
                                         削除
                                       </button>
@@ -654,7 +666,7 @@ export default function ProjectMatrixPage() {
                                   return (
                                     <td
                                       key={taskKey}
-                                      className="px-6 py-4 border-r border-gray-200 cursor-pointer hover:bg-gray-50"
+                                      className="px-6 py-4 border-r border-gray-200 dark:border-gray-600 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 min-w-[200px] w-[200px]"
                                       onClick={() => handleTaskEdit(stage.id, target.id)}
                                     >
                                       {task ? (
@@ -664,13 +676,13 @@ export default function ProjectMatrixPage() {
                                               {getStatusLabel(task.status)}
                                             </Badge>
                                             {task.dueDate && (
-                                              <span className="text-xs text-gray-500">
+                                              <span className="text-xs text-gray-500 dark:text-gray-400">
                                                 {new Date(task.dueDate).toLocaleDateString('ja-JP')}
                                               </span>
                                             )}
                                           </div>
                                           {task.assignees.length > 0 && (
-                                            <div className="text-xs text-gray-600">
+                                            <div className="text-xs text-gray-600 dark:text-gray-300">
                                               担当: {task.assignees.map(id => 
                                                 matrixData.projectMembers.find((m: ProjectMember) => m.id === id)?.name
                                               ).join(', ')}
@@ -678,7 +690,7 @@ export default function ProjectMatrixPage() {
                                           )}
                                         </div>
                                       ) : (
-                                        <div className="text-gray-400 text-sm">
+                                        <div className="text-gray-400 dark:text-gray-500 text-sm">
                                           クリックして編集
                                         </div>
                                       )}

@@ -57,68 +57,206 @@ export default function ProjectDetailPage() {
     console.log('✅ 認証済みユーザー:', user);
 
     // モックデータを読み込み
-    const mockProject: Project = {
-      id: projectId,
-      name: 'ウェブサイトリニューアル',
-      description: 'コーポレートサイトの全面リニューアルプロジェクト',
-      status: 'active',
-      createdAt: '2024-01-15',
-      updatedAt: '2024-01-20',
-      memberCount: 5
-    };
+    let mockProject: Project;
+    let mockTasks: Task[];
 
-    const mockTasks: Task[] = [
-      {
-        id: '1',
-        projectId: projectId,
-        title: 'デザインカンプの作成',
-        description: 'トップページのデザインカンプを作成する',
-        status: 'in_progress',
-        priority: 'high',
-        createdBy: 'user1',
-        createdAt: '2024-01-15T10:00:00Z',
-        updatedAt: '2024-01-20T15:30:00Z',
-        dueDate: '2024-01-25',
-        tags: ['デザイン', 'UI/UX'],
-        matrix: {
-          importance: 'high',
-          urgency: 'high'
+    if (projectId === '4') {
+      // 保険請求処理システムのプロジェクト
+      mockProject = {
+        id: projectId,
+        name: '保険請求処理システム',
+        description: '保険請求の申請から承認・支払いまでの一連のフローを管理するシステム',
+        status: 'active',
+        createdAt: '2024-01-12',
+        updatedAt: '2024-01-22',
+        memberCount: 6
+      };
+
+      mockTasks = [
+        {
+          id: '1',
+          projectId: projectId,
+          title: '請求書類の受付・確認',
+          description: '顧客から提出された保険請求書類の受付と初期確認を行う',
+          status: 'in_progress',
+          priority: 'high',
+          createdBy: 'user1',
+          createdAt: '2024-01-12T09:00:00Z',
+          updatedAt: '2024-01-22T14:30:00Z',
+          dueDate: '2024-01-25',
+          tags: ['受付', '書類確認'],
+          matrix: {
+            importance: 'high',
+            urgency: 'high'
+          }
+        },
+        {
+          id: '2',
+          projectId: projectId,
+          title: '医療機関への照会・確認',
+          description: '医療機関に対する治療内容や診断書の詳細確認',
+          status: 'todo',
+          priority: 'high',
+          createdBy: 'user1',
+          createdAt: '2024-01-13T10:00:00Z',
+          updatedAt: '2024-01-13T10:00:00Z',
+          dueDate: '2024-01-28',
+          tags: ['医療機関', '照会'],
+          matrix: {
+            importance: 'high',
+            urgency: 'high'
+          }
+        },
+        {
+          id: '3',
+          projectId: projectId,
+          title: '査定・審査業務',
+          description: '保険約款に基づく請求内容の査定と審査',
+          status: 'todo',
+          priority: 'high',
+          createdBy: 'user2',
+          createdAt: '2024-01-14T11:00:00Z',
+          updatedAt: '2024-01-14T11:00:00Z',
+          dueDate: '2024-01-30',
+          tags: ['査定', '審査'],
+          matrix: {
+            importance: 'high',
+            urgency: 'high'
+          }
+        },
+        {
+           id: '4',
+           projectId: projectId,
+           title: '支払承認・決裁',
+           description: '査定結果に基づく支払金額の承認と決裁処理',
+           status: 'todo',
+           priority: 'high',
+           createdBy: 'user2',
+           createdAt: '2024-01-15T13:00:00Z',
+           updatedAt: '2024-01-15T13:00:00Z',
+           dueDate: '2024-02-02',
+           tags: ['承認', '決裁'],
+           matrix: {
+             importance: 'high',
+             urgency: 'low'
+           }
+         },
+         {
+           id: '5',
+           projectId: projectId,
+           title: '支払処理・通知',
+           description: '承認された保険金の支払処理と顧客への通知',
+           status: 'todo',
+           priority: 'high',
+           createdBy: 'user3',
+           createdAt: '2024-01-16T15:00:00Z',
+           updatedAt: '2024-01-16T15:00:00Z',
+           dueDate: '2024-02-05',
+           tags: ['支払', '通知'],
+           matrix: {
+             importance: 'high',
+             urgency: 'low'
+           }
+         },
+        {
+           id: '6',
+           projectId: projectId,
+           title: '不備書類の再提出依頼',
+           description: '書類に不備がある場合の顧客への再提出依頼',
+           status: 'done',
+           priority: 'high',
+           createdBy: 'user1',
+           createdAt: '2024-01-12T16:00:00Z',
+           updatedAt: '2024-01-20T10:00:00Z',
+           dueDate: '2024-01-22',
+           tags: ['不備対応', '再提出'],
+           matrix: {
+             importance: 'high',
+             urgency: 'high'
+           }
+         },
+         {
+           id: '7',
+           projectId: projectId,
+           title: 'システム入力・データ管理',
+           description: '請求情報のシステム入力とデータベース管理',
+           status: 'in_progress',
+           priority: 'low',
+           createdBy: 'user3',
+           createdAt: '2024-01-17T09:30:00Z',
+           updatedAt: '2024-01-21T16:45:00Z',
+           tags: ['システム', 'データ管理'],
+           matrix: {
+             importance: 'low',
+             urgency: 'low'
+           }
+         }
+      ];
+    } else {
+      // 既存のウェブサイトリニューアルプロジェクト
+      mockProject = {
+        id: projectId,
+        name: 'ウェブサイトリニューアル',
+        description: 'コーポレートサイトの全面リニューアルプロジェクト',
+        status: 'active',
+        createdAt: '2024-01-15',
+        updatedAt: '2024-01-20',
+        memberCount: 5
+      };
+
+      mockTasks = [
+        {
+          id: '1',
+          projectId: projectId,
+          title: 'デザインカンプの作成',
+          description: 'トップページのデザインカンプを作成する',
+          status: 'in_progress',
+          priority: 'high',
+          createdBy: 'user1',
+          createdAt: '2024-01-15T10:00:00Z',
+          updatedAt: '2024-01-20T15:30:00Z',
+          dueDate: '2024-01-25',
+          tags: ['デザイン', 'UI/UX'],
+          matrix: {
+            importance: 'high',
+            urgency: 'high'
+          }
+        },
+        {
+          id: '2',
+          projectId: projectId,
+          title: 'コンテンツの整理',
+          description: '既存コンテンツの整理と新規コンテンツの企画',
+          status: 'todo',
+          priority: 'medium',
+          createdBy: 'user1',
+          createdAt: '2024-01-16T09:00:00Z',
+          updatedAt: '2024-01-16T09:00:00Z',
+          dueDate: '2024-01-30',
+          tags: ['コンテンツ', '企画'],
+          matrix: {
+            importance: 'high',
+            urgency: 'low'
+          }
+        },
+        {
+          id: '3',
+          projectId: projectId,
+          title: 'SEO対策の実装',
+          description: 'メタタグやサイトマップの最適化',
+          status: 'todo',
+          priority: 'low',
+          createdBy: 'user1',
+          createdAt: '2024-01-17T14:00:00Z',
+          updatedAt: '2024-01-17T14:00:00Z',
+          tags: ['SEO', '技術'],
+          matrix: {
+            importance: 'low',
+            urgency: 'low'
+          }
         }
-      },
-      {
-        id: '2',
-        projectId: projectId,
-        title: 'コンテンツの整理',
-        description: '既存コンテンツの整理と新規コンテンツの企画',
-        status: 'todo',
-        priority: 'medium',
-        createdBy: 'user1',
-        createdAt: '2024-01-16T09:00:00Z',
-        updatedAt: '2024-01-16T09:00:00Z',
-        dueDate: '2024-01-30',
-        tags: ['コンテンツ', '企画'],
-        matrix: {
-          importance: 'high',
-          urgency: 'low'
-        }
-      },
-      {
-        id: '3',
-        projectId: projectId,
-        title: 'SEO対策の実装',
-        description: 'メタタグやサイトマップの最適化',
-        status: 'todo',
-        priority: 'low',
-        createdBy: 'user1',
-        createdAt: '2024-01-17T14:00:00Z',
-        updatedAt: '2024-01-17T14:00:00Z',
-        tags: ['SEO', '技術'],
-        matrix: {
-          importance: 'low',
-          urgency: 'low'
-        }
-      }
-    ];
+      ];
+    }
 
     setTimeout(() => {
       setProject(mockProject);
@@ -274,12 +412,235 @@ export default function ProjectDetailPage() {
         </div>
 
         {/* タスク一覧 */}
-        <div className="space-y-4">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-            タスク一覧 ({tasks.length})
-          </h2>
+        <div className="space-y-6">
+          {/* フィルター・表示オプション */}
+           <div className="flex justify-between items-center">
+             <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+               現場タスク一覧 ({tasks.length})
+             </h2>
+             <div className="flex space-x-4">
+               <select 
+                 value="all" 
+                 onChange={() => {}}
+                 className="w-48 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+               >
+                 <option value="all">全てのミニプロジェクト</option>
+                 <option value="design">デザインカンプの作成</option>
+                 <option value="content">コンテンツの整理</option>
+                 <option value="development">開発作業</option>
+                 <option value="testing">テスト・検証</option>
+               </select>
+               <select 
+                 value="all" 
+                 onChange={() => {}}
+                 className="w-32 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+               >
+                 <option value="all">全ての状態</option>
+                 <option value="pending">未着手</option>
+                 <option value="in_progress">進行中</option>
+                 <option value="completed">完了</option>
+               </select>
+             </div>
+           </div>
+
+          {/* ミニプロジェクト別タスク表示 */}
+          <div className="space-y-8">
+            {/* デザインカンプの作成 */}
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                    デザインカンプの作成
+                  </h3>
+                  <div className="flex items-center space-x-2">
+                    <Badge variant="warning">進行中</Badge>
+                    <span className="text-sm text-gray-500">3/5 完了</span>
+                  </div>
+                </div>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  トップページのデザインカンプを作成する
+                </p>
+              </div>
+              <div className="p-6">
+                <div className="grid grid-cols-1 gap-4">
+                  {tasks.filter(task => task.title.includes('デザイン')).map((task) => {
+                    const quadrant = getMatrixQuadrant(task.matrix.importance, task.matrix.urgency);
+                    return (
+                      <div key={task.id} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div className="flex justify-between items-start mb-3">
+                          <h4 className="text-base font-medium text-gray-900 dark:text-gray-100">
+                            {task.title}
+                          </h4>
+                          <div className="flex space-x-2">
+                            {getStatusBadge(task.status)}
+                            {getPriorityBadge(task.priority)}
+                          </div>
+                        </div>
+                        
+                        {task.description && (
+                          <p className="text-gray-600 dark:text-gray-400 mb-3 text-sm">
+                            {task.description}
+                          </p>
+                        )}
+                        
+                        <div className="flex justify-between items-center text-sm">
+                           <div className="flex items-center space-x-4">
+                             <span className="text-gray-500">
+                               重要度: {task.matrix.importance === 'high' ? '高' : '低'}
+                             </span>
+                             <span className="text-gray-500">
+                               緊急度: {task.matrix.urgency === 'high' ? '高' : '低'}
+                             </span>
+                             <Badge variant="outline" className="text-xs">
+                               {quadrant.label}
+                             </Badge>
+                           </div>
+                           <span className="text-gray-500">
+                             作成日: {new Date(task.createdAt).toLocaleDateString('ja-JP')}
+                           </span>
+                         </div>
+                      </div>
+                    );
+                  })}
+                  {tasks.filter(task => task.title.includes('デザイン')).length === 0 && (
+                    <div className="text-center py-8 text-gray-500">
+                      このミニプロジェクトにはまだタスクがありません
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* コンテンツの整理 */}
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                    コンテンツの整理
+                  </h3>
+                  <div className="flex items-center space-x-2">
+                    <Badge variant="info">未着手</Badge>
+                    <span className="text-sm text-gray-500">0/3 完了</span>
+                  </div>
+                </div>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  既存コンテンツの整理と新規コンテンツの企画
+                </p>
+              </div>
+              <div className="p-6">
+                <div className="grid grid-cols-1 gap-4">
+                  {tasks.filter(task => task.title.includes('コンテンツ')).map((task) => {
+                    const quadrant = getMatrixQuadrant(task.matrix.importance, task.matrix.urgency);
+                    return (
+                      <div key={task.id} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div className="flex justify-between items-start mb-3">
+                          <h4 className="text-base font-medium text-gray-900 dark:text-gray-100">
+                            {task.title}
+                          </h4>
+                          <div className="flex space-x-2">
+                            {getStatusBadge(task.status)}
+                            {getPriorityBadge(task.priority)}
+                          </div>
+                        </div>
+                        
+                        {task.description && (
+                          <p className="text-gray-600 dark:text-gray-400 mb-3 text-sm">
+                            {task.description}
+                          </p>
+                        )}
+                        
+                        <div className="flex justify-between items-center text-sm">
+                           <div className="flex items-center space-x-4">
+                             <span className="text-gray-500">
+                               重要度: {task.matrix.importance === 'high' ? '高' : '低'}
+                             </span>
+                             <span className="text-gray-500">
+                               緊急度: {task.matrix.urgency === 'high' ? '高' : '低'}
+                             </span>
+                             <Badge variant="outline" className="text-xs">
+                               {quadrant.label}
+                             </Badge>
+                           </div>
+                           <span className="text-gray-500">
+                             作成日: {new Date(task.createdAt).toLocaleDateString('ja-JP')}
+                           </span>
+                         </div>
+                      </div>
+                    );
+                  })}
+                  {tasks.filter(task => task.title.includes('コンテンツ')).length === 0 && (
+                    <div className="text-center py-8 text-gray-500">
+                      このミニプロジェクトにはまだタスクがありません
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* その他のタスク */}
+            {tasks.filter(task => !task.title.includes('デザイン') && !task.title.includes('コンテンツ')).length > 0 && (
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+                <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                      その他のタスク
+                    </h3>
+                    <div className="flex items-center space-x-2">
+                      <Badge variant="outline">分類なし</Badge>
+                      <span className="text-sm text-gray-500">
+                        {tasks.filter(task => !task.title.includes('デザイン') && !task.title.includes('コンテンツ')).length} 件
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <div className="grid grid-cols-1 gap-4">
+                    {tasks.filter(task => !task.title.includes('デザイン') && !task.title.includes('コンテンツ')).map((task) => {
+                      const quadrant = getMatrixQuadrant(task.matrix.importance, task.matrix.urgency);
+                      return (
+                        <div key={task.id} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 hover:shadow-md transition-shadow">
+                          <div className="flex justify-between items-start mb-3">
+                            <h4 className="text-base font-medium text-gray-900 dark:text-gray-100">
+                              {task.title}
+                            </h4>
+                            <div className="flex space-x-2">
+                              {getStatusBadge(task.status)}
+                              {getPriorityBadge(task.priority)}
+                            </div>
+                          </div>
+                          
+                          {task.description && (
+                            <p className="text-gray-600 dark:text-gray-400 mb-3 text-sm">
+                              {task.description}
+                            </p>
+                          )}
+                          
+                          <div className="flex justify-between items-center text-sm">
+                             <div className="flex items-center space-x-4">
+                               <span className="text-gray-500">
+                                 重要度: {task.matrix.importance === 'high' ? '高' : '低'}
+                               </span>
+                               <span className="text-gray-500">
+                                 緊急度: {task.matrix.urgency === 'high' ? '高' : '低'}
+                               </span>
+                               <Badge variant="outline" className="text-xs">
+                                 {quadrant.label}
+                               </Badge>
+                             </div>
+                             <span className="text-gray-500">
+                               作成日: {new Date(task.createdAt).toLocaleDateString('ja-JP')}
+                             </span>
+                           </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
           
-          {tasks.length === 0 ? (
+          {tasks.length === 0 && (
             <div className="text-center py-12">
               <div className="w-24 h-24 mx-auto mb-4 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center">
                 <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -295,56 +656,6 @@ export default function ProjectDetailPage() {
               <Button onClick={() => setShowCreateTaskModal(true)}>
                 タスクを作成
               </Button>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 gap-4">
-              {tasks.map((task) => {
-                const quadrant = getMatrixQuadrant(task.matrix.importance, task.matrix.urgency);
-                return (
-                  <Card key={task.id} className="hover:shadow-md transition-shadow">
-                    <CardContent className="p-6">
-                      <div className="flex justify-between items-start mb-3">
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                          {task.title}
-                        </h3>
-                        <div className="flex space-x-2">
-                          {getStatusBadge(task.status)}
-                          {getPriorityBadge(task.priority)}
-                        </div>
-                      </div>
-                      
-                      {task.description && (
-                        <p className="text-gray-600 dark:text-gray-400 mb-3">
-                          {task.description}
-                        </p>
-                      )}
-                      
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-4">
-                          <div className={`px-2 py-1 rounded-md border text-xs font-medium ${quadrant.color}`}>
-                            {quadrant.label}
-                          </div>
-                          {task.dueDate && (
-                            <span className="text-sm text-gray-500">
-                              期限: {task.dueDate}
-                            </span>
-                          )}
-                        </div>
-                        <div className="flex space-x-2">
-                          {task.tags.map((tag, index) => (
-                            <span
-                              key={index}
-                              className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs rounded-md"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                );
-              })}
             </div>
           )}
         </div>

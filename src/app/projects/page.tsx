@@ -76,6 +76,16 @@ export default function ProjectsPage() {
         updatedAt: '2024-01-05',
         memberCount: 4,
         taskCount: 12
+      },
+      {
+        id: '4',
+        name: '保険請求処理システム',
+        description: '保険請求の申請から承認・支払いまでの一連のフローを管理するシステム',
+        status: 'active',
+        createdAt: '2024-01-12',
+        updatedAt: '2024-01-22',
+        memberCount: 6,
+        taskCount: 18
       }
     ];
 
