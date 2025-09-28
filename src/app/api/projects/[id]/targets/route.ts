@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ProjectService, TaskService, withErrorHandling } from '@/lib/database';
+import { ProjectService, TaskService } from '@/lib/database';
 
 // 顧客一覧取得
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  return withErrorHandling(async () => {
+  try {
     const projectId = params.id;
     
     // プロジェクトの顧客データを取得（実装は簡略化）
@@ -27,7 +27,19 @@ export async function GET(
     ];
     
     return NextResponse.json({ success: true, data: targets });
-  });
+  } catch (error) {
+    console.error('API Error:', error);
+    return NextResponse.json(
+      { 
+        success: false, 
+        error: { 
+          code: 'DATABASE_ERROR', 
+          message: error instanceof Error ? error.message : 'Unknown error' 
+        } 
+      },
+      { status: 500 }
+    );
+  }
 }
 
 // 顧客追加
@@ -35,7 +47,7 @@ export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  return withErrorHandling(async () => {
+  try {
     const projectId = params.id;
     const body = await request.json();
     
@@ -56,7 +68,19 @@ export async function POST(
     // await TargetService.create(target);
     
     return NextResponse.json({ success: true, data: target });
-  });
+  } catch (error) {
+    console.error('API Error:', error);
+    return NextResponse.json(
+      { 
+        success: false, 
+        error: { 
+          code: 'DATABASE_ERROR', 
+          message: error instanceof Error ? error.message : 'Unknown error' 
+        } 
+      },
+      { status: 500 }
+    );
+  }
 }
 
 // 顧客更新
@@ -64,7 +88,7 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  return withErrorHandling(async () => {
+  try {
     const projectId = params.id;
     const body = await request.json();
     
@@ -78,7 +102,19 @@ export async function PUT(
     // await TargetService.update(projectId, body.id, updatedTarget);
     
     return NextResponse.json({ success: true, data: updatedTarget });
-  });
+  } catch (error) {
+    console.error('API Error:', error);
+    return NextResponse.json(
+      { 
+        success: false, 
+        error: { 
+          code: 'DATABASE_ERROR', 
+          message: error instanceof Error ? error.message : 'Unknown error' 
+        } 
+      },
+      { status: 500 }
+    );
+  }
 }
 
 // 顧客削除
@@ -86,7 +122,7 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  return withErrorHandling(async () => {
+  try {
     const projectId = params.id;
     const { searchParams } = new URL(request.url);
     const targetId = searchParams.get('targetId');
@@ -102,5 +138,17 @@ export async function DELETE(
     // await TargetService.delete(projectId, targetId);
     
     return NextResponse.json({ success: true, data: { deleted: true } });
-  });
+  } catch (error) {
+    console.error('API Error:', error);
+    return NextResponse.json(
+      { 
+        success: false, 
+        error: { 
+          code: 'DATABASE_ERROR', 
+          message: error instanceof Error ? error.message : 'Unknown error' 
+        } 
+      },
+      { status: 500 }
+    );
+  }
 }

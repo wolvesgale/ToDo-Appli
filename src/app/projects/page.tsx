@@ -19,112 +19,106 @@ interface Project {
 }
 
 export default function ProjectsPage() {
+  const router = useRouter();
+  const { user, isAuthenticated, loading: authLoading } = useAuth();
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectsLoading, setProjectsLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
   const [newProject, setNewProject] = useState({
     name: '',
     description: ''
   });
-  
-  const { user, isAuthenticated, loading: authLoading } = useAuth();
-  const router = useRouter();
 
   useEffect(() => {
-    // 認証状態の読み込み中は何もしない
-    if (authLoading) {
+    if (!authLoading && !isAuthenticated) {
+      router.push('/login');
       return;
     }
-    
-    // 読み込み完了後、認証されていない場合のみリダイレクト
-    if (!isAuthenticated) {
-      console.log('🚫 認証されていません。ログインページにリダイレクトします');
-      router.push('/auth/login');
-      return;
-    }
-    
-    console.log('✅ 認証済みユーザー:', user);
 
-    // モックデータを読み込み
-    const mockProjects: Project[] = [
-      {
-        id: '1',
-        name: 'ウェブサイトリニューアル',
-        description: 'コーポレートサイトの全面リニューアルプロジェクト',
-        status: 'active',
-        createdAt: '2024-01-15',
-        updatedAt: '2024-01-20',
-        memberCount: 5,
-        taskCount: 23
-      },
-      {
-        id: '2',
-        name: 'モバイルアプリ開発',
-        description: '新しいモバイルアプリケーションの開発',
-        status: 'active',
-        createdAt: '2024-01-10',
-        updatedAt: '2024-01-19',
-        memberCount: 3,
-        taskCount: 15
-      },
-      {
-        id: '3',
-        name: 'マーケティングキャンペーン',
-        description: '春の新商品プロモーション企画',
-        status: 'completed',
-        createdAt: '2023-12-01',
-        updatedAt: '2024-01-05',
-        memberCount: 4,
-        taskCount: 12
-      },
-      {
-        id: '4',
-        name: '保険請求処理システム',
-        description: '保険請求の申請から承認・支払いまでの一連のフローを管理するシステム',
-        status: 'active',
-        createdAt: '2024-01-12',
-        updatedAt: '2024-01-22',
-        memberCount: 6,
-        taskCount: 18
+    if (isAuthenticated) {
+      fetchProjects();
+    }
+  }, [authLoading, isAuthenticated, router]);
+
+  const fetchProjects = async () => {
+    try {
+      const response = await fetch('/api/projects');
+      if (response.ok) {
+        const data = await response.json();
+        setProjects(data.data || []);
+      } else {
+        console.error('Failed to fetch projects');
       }
-    ];
-
-    setTimeout(() => {
-      setProjects(mockProjects);
+    } catch (error) {
+      console.error('Error fetching projects:', error);
+    } finally {
       setProjectsLoading(false);
-    }, 1000);
-  }, [isAuthenticated, authLoading, user, router]);
+    }
+  };
 
   const handleCreateProject = async () => {
     if (!newProject.name.trim()) return;
 
-    const project: Project = {
-      id: Date.now().toString(),
-      name: newProject.name,
-      description: newProject.description,
-      status: 'active',
-      createdAt: new Date().toISOString().split('T')[0],
-      updatedAt: new Date().toISOString().split('T')[0],
-      memberCount: 1,
-      taskCount: 0
-    };
+    try {
+      const response = await fetch('/api/projects', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newProject),
+      });
 
-    setProjects(prev => [project, ...prev]);
-    setNewProject({ name: '', description: '' });
-    setShowCreateModal(false);
+      if (response.ok) {
+        const data = await response.json();
+        setProjects(prev => [data.data, ...prev]);
+        setNewProject({ name: '', description: '' });
+        setShowCreateModal(false);
+      } else {
+        console.error('Failed to create project');
+      }
+    } catch (error) {
+      console.error('Error creating project:', error);
+    }
   };
 
-  const getStatusBadge = (status: Project['status']) => {
-    switch (status) {
-      case 'active':
-        return <Badge variant="success">進行中</Badge>;
-      case 'completed':
-        return <Badge variant="default">完了</Badge>;
-      case 'archived':
-        return <Badge variant="outline">アーカイブ</Badge>;
-      default:
-        return <Badge variant="default">{status}</Badge>;
+  const handleDeleteProject = async () => {
+    if (!projectToDelete) return;
+
+    try {
+      const response = await fetch(`/api/projects?projectId=${projectToDelete.id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        setProjects(prev => prev.filter(p => p.id !== projectToDelete.id));
+        setShowDeleteModal(false);
+        setProjectToDelete(null);
+      } else {
+        console.error('Failed to delete project');
+      }
+    } catch (error) {
+      console.error('Error deleting project:', error);
     }
+  };
+
+  const openDeleteModal = (project: Project, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setProjectToDelete(project);
+    setShowDeleteModal(true);
+  };
+
+  const getStatusBadge = (status: string) => {
+    const statusConfig = {
+      active: { label: 'アクティブ', variant: 'success' as const },
+      completed: { label: '完了', variant: 'default' as const },
+      archived: { label: 'アーカイブ', variant: 'outline' as const }
+    };
+    
+    const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.active;
+    return <Badge variant={config.variant}>{config.label}</Badge>;
   };
 
   if (authLoading || projectsLoading) {
@@ -136,6 +130,35 @@ export default function ProjectsPage() {
             <p className="mt-4 text-gray-600 dark:text-gray-400">プロジェクトを読み込み中...</p>
           </div>
         </div>
+        {/* 削除確認モーダル */}
+        {showDeleteModal && projectToDelete && (
+          <Modal
+            isOpen={showDeleteModal}
+            onClose={() => setShowDeleteModal(false)}
+            title="プロジェクトを削除"
+          >
+            <div className="space-y-4">
+              <p className="text-gray-600">
+                「{projectToDelete.name}」を削除してもよろしいですか？
+                この操作は取り消すことができません。
+              </p>
+              <div className="flex justify-end space-x-2">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowDeleteModal(false)}
+                >
+                  キャンセル
+                </Button>
+                <Button
+                  variant="danger"
+                  onClick={handleDeleteProject}
+                >
+                  削除
+                </Button>
+              </div>
+            </div>
+          </Modal>
+        )}
       </Layout>
     );
   }
@@ -191,9 +214,20 @@ export default function ProjectsPage() {
                     <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
                       {project.description}
                     </p>
-                    <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400">
-                      <span>{project.memberCount}人のメンバー</span>
-                      <span>{project.taskCount}個のタスク</span>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <span className="text-sm text-gray-500">
+                          {project.memberCount}人 • {project.taskCount}タスク
+                        </span>
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={(e) => openDeleteModal(project, e)}
+                        className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                      >
+                        削除
+                      </Button>
                     </div>
                     <div className="mt-2 text-xs text-gray-400 dark:text-gray-500">
                       更新日: {project.updatedAt}
