@@ -1,31 +1,36 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 // サービスを動的に取得する関数
-function getProjectService() {
+async function getProjectService() {
   const isDevelopment = process.env.NODE_ENV === 'development';
   const hasAWSCredentials = process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY;
 
   try {
     if (isDevelopment && !hasAWSCredentials) {
       // 開発環境でAWS認証情報がない場合はモックサービスを使用
-      const { MockProjectService } = require('@/lib/mock-dynamodb');
+      const { MockProjectService } = await import('@/lib/mock-dynamodb');
       return MockProjectService;
     } else {
       // 本番環境または認証情報がある場合は実際のDynamoDBサービスを使用
-      const { ProjectService: RealProjectService } = require('@/lib/database');
+      const { ProjectService: RealProjectService } = await import('@/lib/database');
       return RealProjectService;
     }
   } catch (error) {
     console.error('Error loading project service:', error);
     // フォールバックとしてモックサービスを使用
-    const { MockProjectService } = require('@/lib/mock-dynamodb');
-    return MockProjectService;
+    try {
+      const { MockProjectService } = await import('@/lib/mock-dynamodb');
+      return MockProjectService;
+    } catch (fallbackError) {
+      console.error('Error loading fallback service:', fallbackError);
+      throw new Error('Failed to load any project service');
+    }
   }
 }
 
 export async function GET(request: NextRequest) {
   try {
-    const ProjectService = getProjectService();
+    const ProjectService = await getProjectService();
     
     // 開発環境では認証チェックをスキップ
     const userId = 'user1'; // 開発用の固定ユーザーID
@@ -37,7 +42,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Error fetching projects:', error);
     return NextResponse.json(
-      { success: false, error: 'Failed to fetch projects' },
+      { success: false, error: 'Failed to fetch projects', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }
@@ -45,7 +50,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const ProjectService = getProjectService();
+    const ProjectService = await getProjectService();
     const body = await request.json();
     const userId = 'user1'; // 開発用の固定ユーザーID
 
@@ -57,7 +62,6 @@ export async function POST(request: NextRequest) {
       status: 'active',
       settings: {
         isPublic: false,
-        allowComments: true,
         allowGuestAccess: false,
       },
     });
@@ -66,33 +70,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error creating project:', error);
     return NextResponse.json(
-      { success: false, error: 'Failed to create project' },
-      { status: 500 }
-    );
-  }
-}
-
-export async function DELETE(request: NextRequest) {
-  try {
-    const ProjectService = getProjectService();
-    const { searchParams } = new URL(request.url);
-    const projectId = searchParams.get('id');
-
-    if (!projectId) {
-      return NextResponse.json(
-        { success: false, error: 'Project ID is required' },
-        { status: 400 }
-      );
-    }
-
-    // プロジェクトを削除
-    await ProjectService.delete(projectId);
-
-    return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error('Error deleting project:', error);
-    return NextResponse.json(
-      { success: false, error: 'Failed to delete project' },
+      { success: false, error: 'Failed to create project', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }
