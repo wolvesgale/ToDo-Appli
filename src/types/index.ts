@@ -53,7 +53,7 @@ export interface Stage {
   updatedAt: string;
 }
 
-// ターゲット（対象者）関連の型定義
+// 顧客（Target）関連の型定義
 export interface Target {
   id: string;
   projectId: string;

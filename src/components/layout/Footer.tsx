@@ -19,7 +19,7 @@ const Footer: React.FC = () => {
               </span>
             </div>
             <p className="text-gray-600 dark:text-gray-400 text-sm max-w-md">
-              保険請求向け汎用SaaS。チームでの反復型業務において、対象者ごとの工程進捗を可視化し、漏れ・滞留を防止します。
+              保険請求向け汎用SaaS。チームでの反復型業務において、顧客ごとの工程進捗を可視化し、漏れ・滞留を防止します。
             </p>
           </div>
 

@@ -13,7 +13,7 @@ export interface Stage {
   updatedAt: string;
 }
 
-// 対象者（Target/顧客）の型定義
+// 顧客（Target）の型定義
 export interface Target {
   id: string;
   projectId: string;

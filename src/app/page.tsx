@@ -15,7 +15,7 @@ export default function Home() {
                 <span className="text-blue-600 dark:text-blue-400">進捗可視化</span>
               </h1>
               <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
-                保険請求などの反復型業務において、対象者ごとの工程進捗を一目で把握。
+                保険請求などの反復型業務において、顧客ごとの工程進捗を一目で把握。
                 漏れ・滞留を防止し、チーム全体の生産性を向上させます。
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -61,7 +61,7 @@ export default function Home() {
                   マトリクス管理
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300">
-                  対象者×工程のマトリクス形式で進捗を一覧表示。誰が何をいつまでにするかが一目瞭然。
+                  顧客×工程のマトリクス形式で進捗を一覧表示。誰が何をいつまでにするかが一目瞭然。
                 </p>
               </div>
 

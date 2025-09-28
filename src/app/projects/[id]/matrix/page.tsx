@@ -271,7 +271,7 @@ export default function ProjectMatrixPage() {
     }
   };
 
-  // 対象者管理関数
+  // 顧客管理関数
   const handleAddTarget = () => {
     if (!targetForm.name.trim()) return;
 
@@ -327,7 +327,7 @@ export default function ProjectMatrixPage() {
   };
 
   const handleDeleteTarget = (targetId: string) => {
-    if (confirm('この対象者を削除しますか？関連するタスクも削除されます。')) {
+    if (confirm('この顧客を削除しますか？関連するタスクも削除されます。')) {
       setMatrixData(prev => ({
         ...prev,
         targets: prev.targets.filter(target => target.id !== targetId),
@@ -531,7 +531,7 @@ export default function ProjectMatrixPage() {
               </Button>
               <div>
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">プロジェクトマトリクス</h1>
-                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">工程と対象者の進捗管理</p>
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">工程と顧客の進捗管理</p>
               </div>
             </div>
             <div className="flex space-x-4">
@@ -539,8 +539,8 @@ export default function ProjectMatrixPage() {
                 工程追加
               </Button>
               <Button onClick={() => setShowAddTarget(true)}>
-                対象者追加
-              </Button>
+            顧客追加
+          </Button>
               <Button onClick={() => setShowCSVImport(true)} variant="outline">
                 CSV インポート
               </Button>
@@ -569,7 +569,7 @@ export default function ProjectMatrixPage() {
                 <thead className="bg-gray-50 dark:bg-gray-700">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider sticky left-0 bg-gray-50 dark:bg-gray-700 z-10">
-                      工程 / 対象者
+                      工程 / 顧客
                     </th>
                     <Droppable droppableId="targets" direction="horizontal" type="target">
                       {(provided) => (
@@ -747,7 +747,7 @@ export default function ProjectMatrixPage() {
         </div>
       </Modal>
 
-      {/* 対象者追加/編集モーダル */}
+      {/* 顧客追加/編集モーダル */}
       <Modal
         isOpen={showAddTarget}
         onClose={() => {
@@ -755,14 +755,14 @@ export default function ProjectMatrixPage() {
           setEditingTarget(null);
           setTargetForm({ name: '', email: '' });
         }}
-        title={editingTarget ? '対象者編集' : '対象者追加'}
+        title={editingTarget ? '顧客編集' : '顧客追加'}
       >
         <div className="space-y-4">
           <Input
-            label="対象者名"
+            label="顧客名"
             value={targetForm.name}
             onChange={(e) => setTargetForm(prev => ({ ...prev, name: e.target.value }))}
-            placeholder="対象者名を入力"
+            placeholder="顧客名を入力"
           />
           <Input
             label="メールアドレス"
@@ -797,8 +797,8 @@ export default function ProjectMatrixPage() {
       >
         <div className="space-y-4">
           <p className="text-sm text-gray-600">
-            CSV ファイルをアップロードして対象者を一括追加できます。<br />
-            形式: 対象者名,メールアドレス
+            CSV ファイルをアップロードして顧客を一括追加できます。<br />
+            形式: 顧客名,メールアドレス
           </p>
           <input
             type="file"
