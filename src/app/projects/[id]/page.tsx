@@ -49,12 +49,9 @@ export default function ProjectDetailPage() {
     
     // 読み込み完了後、認証されていない場合のみリダイレクト
     if (!isAuthenticated) {
-      console.log('🚫 認証されていません。ログインページにリダイレクトします');
       router.push('/auth/login');
       return;
     }
-    
-    console.log('✅ 認証済みユーザー:', user);
 
     // モックデータを読み込み
     let mockProject: Project;

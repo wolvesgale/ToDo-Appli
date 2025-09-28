@@ -282,7 +282,6 @@ export default function InvitationsPage() {
     ));
 
     // 実際の実装では、ここでAPIを呼び出して招待を承認
-    console.log('招待を承認しました:', invitationId);
   };
 
   const handleDeclineInvitation = async (invitationId: string) => {
@@ -293,7 +292,6 @@ export default function InvitationsPage() {
     ));
 
     // 実際の実装では、ここでAPIを呼び出して招待を拒否
-    console.log('招待を拒否しました:', invitationId);
   };
 
   const handleSendInvitation = async () => {
@@ -336,8 +334,6 @@ export default function InvitationsPage() {
       setInviteMessage('');
       setSending(false);
     }, 1000);
-
-    console.log('招待を送信しました:', newInvitation);
   };
 
   const formatRelativeTime = (dateString: string) => {

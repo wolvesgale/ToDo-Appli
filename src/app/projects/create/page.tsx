@@ -127,20 +127,11 @@ export default function CreateProjectPage() {
   ];
 
   React.useEffect(() => {
-    // 認証状態の読み込み中は何もしない
-    if (authLoading) {
-      return;
-    }
-    
-    // 読み込み完了後、認証されていない場合のみリダイレクト
-    if (!isAuthenticated) {
-      console.log('🚫 認証されていません。ログインページにリダイレクトします');
+    if (!user) {
       router.push('/auth/login');
       return;
     }
-    
-    console.log('✅ 認証済みユーザー:', user);
-  }, [isAuthenticated, authLoading, user, router]);
+  }, [user, router]);
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -187,8 +178,6 @@ export default function CreateProjectPage() {
 
       // モック処理：実際にはAPIを呼び出す
       await new Promise(resolve => setTimeout(resolve, 1500));
-
-      console.log('プロジェクト作成:', projectData);
 
       // 作成したプロジェクトの詳細ページにリダイレクト
       router.push(`/projects/${projectData.id}`);

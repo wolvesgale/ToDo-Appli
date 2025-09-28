@@ -18,22 +18,16 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('📝 フォーム送信開始:', { email, password: '***' });
     setLoading(true);
     setError('');
-
+    
     try {
-      console.log('🔄 ログイン関数呼び出し');
       await login(email, password);
-      console.log('🚀 ログイン成功、リダイレクト開始');
       router.push('/projects');
-      console.log('📍 リダイレクト完了');
-    } catch (err) {
-      console.error('💥 ログイン失敗:', err);
+    } catch (error) {
       setError('ログインに失敗しました。メールアドレスとパスワードを確認してください。');
     } finally {
       setLoading(false);
-      console.log('🔚 フォーム処理終了');
     }
   };
 

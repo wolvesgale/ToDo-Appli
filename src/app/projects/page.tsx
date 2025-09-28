@@ -87,7 +87,7 @@ export default function ProjectsPage() {
     if (!projectToDelete) return;
 
     try {
-      const response = await fetch(`/api/projects?projectId=${projectToDelete.id}`, {
+      const response = await fetch(`/api/projects?id=${projectToDelete.id}`, {
         method: 'DELETE',
       });
 

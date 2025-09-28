@@ -1,7 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ProjectService, TaskService } from '@/lib/database';
 
-// 顧客一覧取得
+// 環境変数をチェックして適切なサービスを選択
+const isDevelopment = process.env.NODE_ENV === 'development';
+const hasAWSCredentials = process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY;
+
+let TargetService: any;
+
+if (isDevelopment && !hasAWSCredentials) {
+  // 開発環境でAWS認証情報がない場合はモックサービスを使用
+  const { MockTargetService } = require('@/lib/mock-dynamodb');
+  TargetService = MockTargetService;
+} else {
+  // 本番環境または認証情報がある場合は実際のDynamoDBサービスを使用
+  const { TargetService: RealTargetService } = require('@/lib/target-service');
+  TargetService = RealTargetService;
+}
+
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -9,40 +23,19 @@ export async function GET(
   try {
     const projectId = params.id;
     
-    // プロジェクトの顧客データを取得（実装は簡略化）
-    // 実際の実装では、Targetテーブルから取得
-    const targets = [
-      {
-        id: '1',
-        projectId,
-        name: '田中太郎',
-        displayName: '田中太郎',
-        email: 'tanaka@example.com',
-        order: 0,
-        archived: false,
-        metadata: {},
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      }
-    ];
-    
+    // ターゲット一覧を取得
+    const targets = await TargetService.getByProject(projectId);
+
     return NextResponse.json({ success: true, data: targets });
   } catch (error) {
-    console.error('API Error:', error);
+    console.error('Error fetching targets:', error);
     return NextResponse.json(
-      { 
-        success: false, 
-        error: { 
-          code: 'DATABASE_ERROR', 
-          message: error instanceof Error ? error.message : 'Unknown error' 
-        } 
-      },
+      { success: false, error: 'Failed to fetch targets' },
       { status: 500 }
     );
   }
 }
 
-// 顧客追加
 export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -51,33 +44,22 @@ export async function POST(
     const projectId = params.id;
     const body = await request.json();
     
-    const target = {
-      id: Date.now().toString(),
+    // ターゲットを作成
+    const target = await TargetService.create({
       projectId,
       name: body.name,
-      displayName: body.displayName || body.name,
-      email: body.email || '',
+      displayName: body.displayName,
+      email: body.email,
       order: body.order || 0,
       archived: false,
       metadata: body.metadata || {},
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
-    
-    // 実際の実装では、DynamoDBに保存
-    // await TargetService.create(target);
-    
+    });
+
     return NextResponse.json({ success: true, data: target });
   } catch (error) {
-    console.error('API Error:', error);
+    console.error('Error creating target:', error);
     return NextResponse.json(
-      { 
-        success: false, 
-        error: { 
-          code: 'DATABASE_ERROR', 
-          message: error instanceof Error ? error.message : 'Unknown error' 
-        } 
-      },
+      { success: false, error: 'Failed to create target' },
       { status: 500 }
     );
   }
@@ -92,26 +74,14 @@ export async function PUT(
     const projectId = params.id;
     const body = await request.json();
     
-    const updatedTarget = {
-      ...body,
-      projectId,
-      updatedAt: new Date().toISOString()
-    };
-    
-    // 実際の実装では、DynamoDBを更新
-    // await TargetService.update(projectId, body.id, updatedTarget);
+    // ターゲットを更新
+    const updatedTarget = await TargetService.update(projectId, body.id, body);
     
     return NextResponse.json({ success: true, data: updatedTarget });
   } catch (error) {
-    console.error('API Error:', error);
+    console.error('Error updating target:', error);
     return NextResponse.json(
-      { 
-        success: false, 
-        error: { 
-          code: 'DATABASE_ERROR', 
-          message: error instanceof Error ? error.message : 'Unknown error' 
-        } 
-      },
+      { success: false, error: 'Failed to update target' },
       { status: 500 }
     );
   }
@@ -129,25 +99,19 @@ export async function DELETE(
     
     if (!targetId) {
       return NextResponse.json(
-        { success: false, error: { code: 'MISSING_TARGET_ID', message: 'Target ID is required' } },
+        { success: false, error: 'Target ID is required' },
         { status: 400 }
       );
     }
     
-    // 実際の実装では、DynamoDBから削除
-    // await TargetService.delete(projectId, targetId);
+    // ターゲットを削除
+    await TargetService.delete(projectId, targetId);
     
     return NextResponse.json({ success: true, data: { deleted: true } });
   } catch (error) {
-    console.error('API Error:', error);
+    console.error('Error deleting target:', error);
     return NextResponse.json(
-      { 
-        success: false, 
-        error: { 
-          code: 'DATABASE_ERROR', 
-          message: error instanceof Error ? error.message : 'Unknown error' 
-        } 
-      },
+      { success: false, error: 'Failed to delete target' },
       { status: 500 }
     );
   }

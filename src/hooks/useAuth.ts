@@ -91,8 +91,19 @@ export const useAuth = (): UseAuthReturn => {
 
   // 初期化時に認証状態を確認
   useEffect(() => {
-    checkAuth();
-  }, []); // checkAuthを依存配列から削除して無限ループを防ぐ
+    const authState = getAuthState();
+    setUser(authState?.user || null);
+    setLoading(false);
+    
+    // 認証状態の変更を監視
+    const handleStorageChange = () => {
+      const newAuthState = getAuthState();
+      setUser(newAuthState?.user || null);
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   return {
     user,

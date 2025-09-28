@@ -217,14 +217,12 @@ export default function NotificationsPage() {
     ));
 
     // 実際の実装では、ここでAPIを呼び出して既読状態を更新
-    console.log('通知を既読にしました:', notificationId);
   };
 
   const handleMarkAllAsRead = async () => {
     setNotifications(prev => prev.map(notification => ({ ...notification, isRead: true })));
 
     // 実際の実装では、ここでAPIを呼び出してすべての通知を既読に
-    console.log('すべての通知を既読にしました');
   };
 
   const handleNotificationClick = (notification: Notification) => {

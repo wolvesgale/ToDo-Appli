@@ -76,12 +76,9 @@ export default function ProjectSettingsPage() {
     
     // 読み込み完了後、認証されていない場合のみリダイレクト
     if (!isAuthenticated) {
-      console.log('🚫 認証されていません。ログインページにリダイレクトします');
       router.push('/auth/login');
       return;
     }
-    
-    console.log('✅ 認証済みユーザー:', user);
 
     // モックデータを読み込み
     const mockProject: Project = {
@@ -169,7 +166,7 @@ export default function ProjectSettingsPage() {
       // 実際の実装では、ここでAPIを呼び出してプロジェクトを更新
       await new Promise(resolve => setTimeout(resolve, 1500));
 
-      console.log('プロジェクト更新:', project);
+
       
       // 成功メッセージを表示（実際の実装では適切な通知システムを使用）
       alert('プロジェクトが更新されました');
@@ -186,7 +183,7 @@ export default function ProjectSettingsPage() {
       // 実際の実装では、ここでAPIを呼び出してプロジェクトを削除
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      console.log('プロジェクト削除:', projectId);
+
       
       // プロジェクト一覧ページにリダイレクト
       router.push('/projects');
@@ -227,38 +224,20 @@ export default function ProjectSettingsPage() {
     }
   };
 
-  const handleRoleChange = async (memberId: string, newRole: ProjectMember['role']) => {
-    try {
-      // 実際の実装では、ここでAPIを呼び出して権限を更新
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      setMembers(prev => prev.map(member => 
-        member.id === memberId ? { ...member, role: newRole } : member
-      ));
-
-      console.log('権限更新:', { memberId, newRole });
-    } catch (error) {
-      console.error('権限更新エラー:', error);
-      alert('権限の更新に失敗しました。もう一度お試しください。');
-    }
+  const handleUpdateMemberRole = async (memberId: string, newRole: string) => {
+    setMembers(prev => 
+      prev.map(member => 
+        member.id === memberId 
+          ? { ...member, role: newRole as 'owner' | 'admin' | 'member' }
+          : member
+      )
+    );
+    // 実際の実装では、ここでAPIを呼び出してメンバーの権限を更新
   };
 
   const handleRemoveMember = async (memberId: string) => {
-    if (!confirm('このメンバーをプロジェクトから削除しますか？')) {
-      return;
-    }
-
-    try {
-      // 実際の実装では、ここでAPIを呼び出してメンバーを削除
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      setMembers(prev => prev.filter(member => member.id !== memberId));
-
-      console.log('メンバー削除:', memberId);
-    } catch (error) {
-      console.error('メンバー削除エラー:', error);
-      alert('メンバーの削除に失敗しました。もう一度お試しください。');
-    }
+    setMembers(prev => prev.filter(member => member.id !== memberId));
+    // 実際の実装では、ここでAPIを呼び出してメンバーを削除
   };
 
   const currentUserMember = members.find(m => m.userId === user?.id);
@@ -442,7 +421,7 @@ export default function ProjectSettingsPage() {
                       {canManageProject && member.role !== 'owner' ? (
                         <Select
                           value={member.role}
-                          onChange={(value) => handleRoleChange(member.id, value as ProjectMember['role'])}
+                          onChange={(value) => handleUpdateMemberRole(member.id, value)}
                           options={[
                             { value: 'admin', label: roleLabels.admin },
                             { value: 'member', label: roleLabels.member },
