@@ -272,7 +272,7 @@ export default function ProjectMatrixPage() {
   };
 
   // 顧客管理関数
-  const handleAddTarget = () => {
+  const handleAddTarget = async () => {
     if (!targetForm.name.trim()) return;
 
     const newTarget: Target = {
@@ -280,7 +280,7 @@ export default function ProjectMatrixPage() {
       projectId: params.id as string,
       name: targetForm.name,
       displayName: targetForm.name,
-      email: targetForm.email,
+      email: targetForm.email || '',
       order: matrixData.targets.length,
       archived: false,
       metadata: {},
@@ -288,10 +288,28 @@ export default function ProjectMatrixPage() {
       updatedAt: new Date().toISOString()
     };
 
-    setMatrixData(prev => ({
-      ...prev,
-      targets: [...prev.targets, newTarget],
-    }));
+    try {
+      // APIを呼び出して顧客を追加
+      const response = await fetch(`/api/projects/${params.id}/targets`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newTarget),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success) {
+          setMatrixData(prev => ({
+            ...prev,
+            targets: [...prev.targets, result.data],
+          }));
+        }
+      }
+    } catch (error) {
+      console.error('顧客追加エラー:', error);
+    }
 
     setTargetForm({ name: '', email: '' });
     setShowAddTarget(false);
@@ -303,23 +321,41 @@ export default function ProjectMatrixPage() {
     setShowAddTarget(true);
   };
 
-  const handleUpdateTarget = () => {
+  const handleUpdateTarget = async () => {
     if (!editingTarget || !targetForm.name.trim()) return;
 
-    setMatrixData(prev => ({
-      ...prev,
-      targets: prev.targets.map(target =>
-        target.id === editingTarget.id
-          ? { 
-              ...target, 
-              name: targetForm.name, 
-              displayName: targetForm.name,
-              email: targetForm.email,
-              updatedAt: new Date().toISOString()
-            }
-          : target
-      ),
-    }));
+    const updatedTarget: Target = {
+      ...editingTarget,
+      name: targetForm.name,
+      displayName: targetForm.name,
+      email: targetForm.email || '',
+      updatedAt: new Date().toISOString(),
+    };
+
+    try {
+      // APIを呼び出して顧客を更新
+      const response = await fetch(`/api/projects/${params.id}/targets`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedTarget),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success) {
+          setMatrixData(prev => ({
+            ...prev,
+            targets: prev.targets.map(target => 
+              target.id === editingTarget.id ? result.data : target
+            ),
+          }));
+        }
+      }
+    } catch (error) {
+      console.error('顧客更新エラー:', error);
+    }
 
     setEditingTarget(null);
     setTargetForm({ name: '', email: '' });
@@ -381,7 +417,7 @@ export default function ProjectMatrixPage() {
     setShowTaskEdit(true);
   };
 
-  const handleTaskSave = () => {
+  const handleTaskSave = async () => {
     const now = new Date().toISOString();
     
     const taskData: MatrixTask = {
@@ -408,12 +444,33 @@ export default function ProjectMatrixPage() {
       updatedAt: now,
     };
 
-    setMatrixData(prev => ({
-      ...prev,
-      tasks: editingTask 
-        ? prev.tasks.map(task => task.id === editingTask.id ? taskData : task)
-        : [...prev.tasks, taskData],
-    }));
+    try {
+      // APIを呼び出してタスクを保存
+      const response = await fetch(`/api/projects/${params.id}/tasks`, {
+        method: editingTask ? 'PUT' : 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...taskData,
+          matrix: { importance: 'high', urgency: 'high' } // database.ts のTask型に合わせる
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success) {
+          setMatrixData(prev => ({
+            ...prev,
+            tasks: editingTask 
+              ? prev.tasks.map(task => task.id === editingTask.id ? { ...taskData, ...result.data } : task)
+              : [...prev.tasks, { ...taskData, ...result.data }],
+          }));
+        }
+      }
+    } catch (error) {
+      console.error('タスク保存エラー:', error);
+    }
 
     setShowTaskEdit(false);
     setEditingTask(null);

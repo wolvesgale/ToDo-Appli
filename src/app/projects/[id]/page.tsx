@@ -282,7 +282,28 @@ export default function ProjectDetailPage() {
       matrix: newTask.matrix
     };
 
-    setTasks(prev => [task, ...prev]);
+    try {
+      // APIを呼び出してタスクを作成
+      const response = await fetch(`/api/projects/${projectId}/tasks`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(task),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success) {
+          setTasks(prev => [result.data, ...prev]);
+        }
+      }
+    } catch (error) {
+      console.error('タスク作成エラー:', error);
+      // エラーの場合はローカル状態のみ更新
+      setTasks(prev => [task, ...prev]);
+    }
+
     setNewTask({
       title: '',
       description: '',
