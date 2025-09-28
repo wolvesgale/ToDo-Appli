@@ -1,23 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// 環境変数をチェックして適切なサービスを選択
-const isDevelopment = process.env.NODE_ENV === 'development';
-const hasAWSCredentials = process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY;
+// サービスを動的に取得する関数
+function getProjectService() {
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  const hasAWSCredentials = process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY;
 
-let ProjectService: any;
-
-if (isDevelopment && !hasAWSCredentials) {
-  // 開発環境でAWS認証情報がない場合はモックサービスを使用
-  const { MockProjectService } = require('@/lib/mock-dynamodb');
-  ProjectService = MockProjectService;
-} else {
-  // 本番環境または認証情報がある場合は実際のDynamoDBサービスを使用
-  const { ProjectService: RealProjectService } = require('@/lib/database');
-  ProjectService = RealProjectService;
+  try {
+    if (isDevelopment && !hasAWSCredentials) {
+      // 開発環境でAWS認証情報がない場合はモックサービスを使用
+      const { MockProjectService } = require('@/lib/mock-dynamodb');
+      return MockProjectService;
+    } else {
+      // 本番環境または認証情報がある場合は実際のDynamoDBサービスを使用
+      const { ProjectService: RealProjectService } = require('@/lib/database');
+      return RealProjectService;
+    }
+  } catch (error) {
+    console.error('Error loading project service:', error);
+    // フォールバックとしてモックサービスを使用
+    const { MockProjectService } = require('@/lib/mock-dynamodb');
+    return MockProjectService;
+  }
 }
 
 export async function GET(request: NextRequest) {
   try {
+    const ProjectService = getProjectService();
+    
     // 開発環境では認証チェックをスキップ
     const userId = 'user1'; // 開発用の固定ユーザーID
     
@@ -36,6 +45,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const ProjectService = getProjectService();
     const body = await request.json();
     const userId = 'user1'; // 開発用の固定ユーザーID
 
@@ -48,8 +58,8 @@ export async function POST(request: NextRequest) {
       settings: {
         isPublic: false,
         allowComments: true,
-        theme: 'default'
-      }
+        allowGuestAccess: false,
+      },
     });
 
     return NextResponse.json({ success: true, data: project });
@@ -64,6 +74,7 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
+    const ProjectService = getProjectService();
     const { searchParams } = new URL(request.url);
     const projectId = searchParams.get('id');
 
@@ -74,37 +85,10 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    if (isDevelopment && !hasAWSCredentials) {
-      // モックサービスを使用
-      await ProjectService.delete(projectId);
-    } else {
-      // 実際のDynamoDBから削除
-      const { DeleteCommand } = await import('@aws-sdk/lib-dynamodb');
-      const { DynamoDBClient } = await import('@aws-sdk/client-dynamodb');
-      const { DynamoDBDocumentClient } = await import('@aws-sdk/lib-dynamodb');
-      
-      const client = new DynamoDBClient({
-        region: process.env.AWS_REGION || 'ap-northeast-1',
-        credentials: {
-          accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
-          secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
-        },
-      });
-      
-      const docClient = DynamoDBDocumentClient.from(client);
-      
-      const deleteCommand = new DeleteCommand({
-        TableName: process.env.DYNAMODB_TABLE_NAME,
-        Key: {
-          PK: `PROJECT#${projectId}`,
-          SK: `PROJECT#${projectId}`
-        }
-      });
+    // プロジェクトを削除
+    await ProjectService.delete(projectId);
 
-      await docClient.send(deleteCommand);
-    }
-
-    return NextResponse.json({ success: true, data: { deleted: true } });
+    return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error deleting project:', error);
     return NextResponse.json(

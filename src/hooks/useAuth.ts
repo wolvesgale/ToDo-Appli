@@ -22,23 +22,18 @@ export const useAuth = (): UseAuthReturn => {
   // 認証状態を確認
   const checkAuth = useCallback(async () => {
     try {
-      console.log('🔍 認証状態を確認中...');
       const authState = getAuthState();
-      console.log('📋 取得した認証状態:', authState);
       setUser(authState?.user || null);
-      console.log('👤 ユーザー状態更新:', authState?.user || null);
     } catch (error) {
       console.error('❌ 認証確認エラー:', error);
       setUser(null);
     } finally {
       setLoading(false);
-      console.log('✅ 認証状態確認完了');
     }
   }, []);
 
   // ログイン
   const login = useCallback(async (email: string, password: string) => {
-    console.log('🔐 ログイン処理開始:', { email });
     setLoading(true);
     try {
       // TODO: Cognito認証の実装
@@ -49,27 +44,19 @@ export const useAuth = (): UseAuthReturn => {
         name: email.split('@')[0],
       };
       
-      console.log('👤 モックユーザー作成:', mockUser);
-      
       const authState: AuthState = {
         isAuthenticated: true,
         user: mockUser,
         token: 'mock_access_token',
       };
       
-      console.log('💾 認証状態保存:', authState);
       saveAuthState(authState);
-      
-      console.log('✅ ユーザー状態更新');
       setUser(mockUser);
-      
-      console.log('🎉 ログイン成功');
     } catch (error) {
       console.error('❌ ログインエラー:', error);
       throw error;
     } finally {
       setLoading(false);
-      console.log('🏁 ログイン処理終了');
     }
   }, []);
 

@@ -21,7 +21,8 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const projectId = params.id;
+    const { id } = await params;
+    const projectId = id;
     
     // ターゲット一覧を取得
     const targets = await TargetService.getByProject(projectId);
@@ -41,7 +42,8 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
-    const projectId = params.id;
+    const { id } = await params;
+    const projectId = id;
     const body = await request.json();
     
     // ターゲットを作成
@@ -71,13 +73,18 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    const projectId = params.id;
+    const { id } = await params;
+    const projectId = id;
     const body = await request.json();
     
     // ターゲットを更新
-    const updatedTarget = await TargetService.update(projectId, body.id, body);
-    
-    return NextResponse.json({ success: true, data: updatedTarget });
+    const target = await TargetService.update(body.targetId, {
+      name: body.name,
+      description: body.description,
+      status: body.status,
+    });
+
+    return NextResponse.json({ success: true, data: target });
   } catch (error) {
     console.error('Error updating target:', error);
     return NextResponse.json(
@@ -93,21 +100,22 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const projectId = params.id;
+    const { id } = await params;
+    const projectId = id;
     const { searchParams } = new URL(request.url);
     const targetId = searchParams.get('targetId');
-    
+
     if (!targetId) {
       return NextResponse.json(
         { success: false, error: 'Target ID is required' },
         { status: 400 }
       );
     }
-    
+
     // ターゲットを削除
-    await TargetService.delete(projectId, targetId);
-    
-    return NextResponse.json({ success: true, data: { deleted: true } });
+    await TargetService.delete(targetId);
+
+    return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error deleting target:', error);
     return NextResponse.json(
