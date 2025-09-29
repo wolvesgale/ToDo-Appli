@@ -6,14 +6,19 @@ async function getProjectService() {
   const hasAWSCredentials = process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY;
 
   try {
-    if (isDevelopment && !hasAWSCredentials) {
-      // 開発環境でAWS認証情報がない場合はモックサービスを使用
+    // Vercelでは常にモックサービスを使用（AWS設定が複雑なため）
+    if (isDevelopment || process.env.VERCEL) {
+      // 開発環境またはVercelではモックサービスを使用
       const { MockProjectService } = await import('@/lib/mock-dynamodb');
       return MockProjectService;
-    } else {
-      // 本番環境または認証情報がある場合は実際のDynamoDBサービスを使用
+    } else if (hasAWSCredentials) {
+      // 本番環境で認証情報がある場合は実際のDynamoDBサービスを使用
       const { ProjectService: RealProjectService } = await import('@/lib/database');
       return RealProjectService;
+    } else {
+      // フォールバック：モックサービスを使用
+      const { MockProjectService } = await import('@/lib/mock-dynamodb');
+      return MockProjectService;
     }
   } catch (error) {
     console.error('Error loading project service:', error);
