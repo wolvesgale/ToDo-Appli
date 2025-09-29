@@ -175,7 +175,7 @@ export default function ProjectsPage() {
               チームでタスクを管理し、効率的にプロジェクトを進めましょう
             </p>
           </div>
-          <Link href="/projects/create">
+          <Link href="/projects/new">
             <Button>
               新しいプロジェクト
             </Button>
