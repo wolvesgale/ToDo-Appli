@@ -160,26 +160,19 @@ export default function CreateProjectPage() {
     setLoading(true);
 
     try {
-      // 実際の実装では、ここでAPIを呼び出してプロジェクトを作成
-      const selectedTemplate = templates.find(t => t.id === formData.template);
-      
+      // プロジェクトを作成（実際のAPIコールの代わりにモックデータを作成）
       const projectData = {
         id: Date.now().toString(),
         name: formData.name,
         description: formData.description,
         color: formData.color,
-        visibility: formData.visibility,
         template: formData.template,
-        defaultTasks: selectedTemplate?.defaultTasks || [],
-        createdBy: user?.id || 'current-user',
+        status: 'active' as const,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       };
 
-      // モック処理：実際にはAPIを呼び出す
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-      // 作成したプロジェクトの詳細ページにリダイレクト
+      // 作成されたプロジェクトの詳細ページにリダイレクト
       router.push(`/projects/${projectData.id}`);
     } catch (error) {
       console.error('プロジェクト作成エラー:', error);

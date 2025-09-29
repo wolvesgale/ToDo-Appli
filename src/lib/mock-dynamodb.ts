@@ -72,7 +72,7 @@ let mockProjects: Project[] = [
   {
     id: '2',
     name: 'サンプルプロジェクト2',
-    description: '別のサンプルプロジェクトです',
+    description: 'これは2番目のサンプルプロジェクトです',
     ownerId: 'user1',
     status: 'active',
     createdAt: new Date().toISOString(),

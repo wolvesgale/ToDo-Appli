@@ -32,7 +32,7 @@ export default function ProjectDetailPage() {
   const [newTask, setNewTask] = useState({
     title: '',
     description: '',
-    priority: 'medium' as Task['priority'],
+    priority: 'high' as Task['priority'],
     matrix: {
       importance: 'high' as 'high' | 'low',
       urgency: 'high' as 'high' | 'low'
@@ -57,163 +57,31 @@ export default function ProjectDetailPage() {
     let mockProject: Project;
     let mockTasks: Task[];
 
-    if (projectId === '4') {
-      // 保険請求処理システムのプロジェクト
+    if (projectId === '1') {
+      // サンプルプロジェクト1
       mockProject = {
         id: projectId,
-        name: '保険請求処理システム',
-        description: '保険請求の申請から承認・支払いまでの一連のフローを管理するシステム',
-        status: 'active',
-        createdAt: '2024-01-12',
-        updatedAt: '2024-01-22',
-        memberCount: 6
-      };
-
-      mockTasks = [
-        {
-          id: '1',
-          projectId: projectId,
-          title: '請求書類の受付・確認',
-          description: '顧客から提出された保険請求書類の受付と初期確認を行う',
-          status: 'in_progress',
-          priority: 'high',
-          createdBy: 'user1',
-          createdAt: '2024-01-12T09:00:00Z',
-          updatedAt: '2024-01-22T14:30:00Z',
-          dueDate: '2024-01-25',
-          tags: ['受付', '書類確認'],
-          matrix: {
-            importance: 'high',
-            urgency: 'high'
-          }
-        },
-        {
-          id: '2',
-          projectId: projectId,
-          title: '医療機関への照会・確認',
-          description: '医療機関に対する治療内容や診断書の詳細確認',
-          status: 'todo',
-          priority: 'high',
-          createdBy: 'user1',
-          createdAt: '2024-01-13T10:00:00Z',
-          updatedAt: '2024-01-13T10:00:00Z',
-          dueDate: '2024-01-28',
-          tags: ['医療機関', '照会'],
-          matrix: {
-            importance: 'high',
-            urgency: 'high'
-          }
-        },
-        {
-          id: '3',
-          projectId: projectId,
-          title: '査定・審査業務',
-          description: '保険約款に基づく請求内容の査定と審査',
-          status: 'todo',
-          priority: 'high',
-          createdBy: 'user2',
-          createdAt: '2024-01-14T11:00:00Z',
-          updatedAt: '2024-01-14T11:00:00Z',
-          dueDate: '2024-01-30',
-          tags: ['査定', '審査'],
-          matrix: {
-            importance: 'high',
-            urgency: 'high'
-          }
-        },
-        {
-           id: '4',
-           projectId: projectId,
-           title: '支払承認・決裁',
-           description: '査定結果に基づく支払金額の承認と決裁処理',
-           status: 'todo',
-           priority: 'high',
-           createdBy: 'user2',
-           createdAt: '2024-01-15T13:00:00Z',
-           updatedAt: '2024-01-15T13:00:00Z',
-           dueDate: '2024-02-02',
-           tags: ['承認', '決裁'],
-           matrix: {
-             importance: 'high',
-             urgency: 'low'
-           }
-         },
-         {
-           id: '5',
-           projectId: projectId,
-           title: '支払処理・通知',
-           description: '承認された保険金の支払処理と顧客への通知',
-           status: 'todo',
-           priority: 'high',
-           createdBy: 'user3',
-           createdAt: '2024-01-16T15:00:00Z',
-           updatedAt: '2024-01-16T15:00:00Z',
-           dueDate: '2024-02-05',
-           tags: ['支払', '通知'],
-           matrix: {
-             importance: 'high',
-             urgency: 'low'
-           }
-         },
-        {
-           id: '6',
-           projectId: projectId,
-           title: '不備書類の再提出依頼',
-           description: '書類に不備がある場合の顧客への再提出依頼',
-           status: 'done',
-           priority: 'high',
-           createdBy: 'user1',
-           createdAt: '2024-01-12T16:00:00Z',
-           updatedAt: '2024-01-20T10:00:00Z',
-           dueDate: '2024-01-22',
-           tags: ['不備対応', '再提出'],
-           matrix: {
-             importance: 'high',
-             urgency: 'high'
-           }
-         },
-         {
-           id: '7',
-           projectId: projectId,
-           title: 'システム入力・データ管理',
-           description: '請求情報のシステム入力とデータベース管理',
-           status: 'in_progress',
-           priority: 'low',
-           createdBy: 'user3',
-           createdAt: '2024-01-17T09:30:00Z',
-           updatedAt: '2024-01-21T16:45:00Z',
-           tags: ['システム', 'データ管理'],
-           matrix: {
-             importance: 'low',
-             urgency: 'low'
-           }
-         }
-      ];
-    } else {
-      // 既存のウェブサイトリニューアルプロジェクト
-      mockProject = {
-        id: projectId,
-        name: 'ウェブサイトリニューアル',
-        description: 'コーポレートサイトの全面リニューアルプロジェクト',
+        name: 'サンプルプロジェクト1',
+        description: 'これはサンプルプロジェクトです',
         status: 'active',
         createdAt: '2024-01-15',
         updatedAt: '2024-01-20',
-        memberCount: 5
+        memberCount: 3
       };
 
       mockTasks = [
         {
           id: '1',
           projectId: projectId,
-          title: 'デザインカンプの作成',
-          description: 'トップページのデザインカンプを作成する',
+          title: 'サンプルタスク1',
+          description: 'これはサンプルタスクです',
           status: 'in_progress',
           priority: 'high',
           createdBy: 'user1',
           createdAt: '2024-01-15T10:00:00Z',
           updatedAt: '2024-01-20T15:30:00Z',
           dueDate: '2024-01-25',
-          tags: ['デザイン', 'UI/UX'],
+          tags: ['サンプル', 'テスト'],
           matrix: {
             importance: 'high',
             urgency: 'high'
@@ -222,34 +90,97 @@ export default function ProjectDetailPage() {
         {
           id: '2',
           projectId: projectId,
-          title: 'コンテンツの整理',
-          description: '既存コンテンツの整理と新規コンテンツの企画',
+          title: 'サンプルタスク2',
+          description: '2番目のサンプルタスクです',
           status: 'todo',
-          priority: 'medium',
+          priority: 'high',
           createdBy: 'user1',
           createdAt: '2024-01-16T09:00:00Z',
           updatedAt: '2024-01-16T09:00:00Z',
           dueDate: '2024-01-30',
-          tags: ['コンテンツ', '企画'],
+          tags: ['サンプル', 'テスト'],
           matrix: {
             importance: 'high',
             urgency: 'low'
           }
+        }
+      ];
+    } else if (projectId === '2') {
+      // サンプルプロジェクト2
+      mockProject = {
+        id: projectId,
+        name: 'サンプルプロジェクト2',
+        description: 'これは2番目のサンプルプロジェクトです',
+        status: 'active',
+        createdAt: '2024-01-10',
+        updatedAt: '2024-01-18',
+        memberCount: 4
+      };
+
+      mockTasks = [
+        {
+          id: '1',
+          projectId: projectId,
+          title: 'プロジェクト2のタスク1',
+          description: 'プロジェクト2の最初のタスクです',
+          status: 'done',
+          priority: 'high',
+          createdBy: 'user1',
+          createdAt: '2024-01-10T10:00:00Z',
+          updatedAt: '2024-01-15T15:30:00Z',
+          dueDate: '2024-01-20',
+          tags: ['完了', 'テスト'],
+          matrix: {
+            importance: 'high',
+            urgency: 'high'
+          }
         },
         {
-          id: '3',
+          id: '2',
           projectId: projectId,
-          title: 'SEO対策の実装',
-          description: 'メタタグやサイトマップの最適化',
-          status: 'todo',
-          priority: 'low',
+          title: 'プロジェクト2のタスク2',
+          description: 'プロジェクト2の2番目のタスクです',
+          status: 'in_progress',
+          priority: 'high',
           createdBy: 'user1',
-          createdAt: '2024-01-17T14:00:00Z',
-          updatedAt: '2024-01-17T14:00:00Z',
-          tags: ['SEO', '技術'],
+          createdAt: '2024-01-12T09:00:00Z',
+          updatedAt: '2024-01-18T09:00:00Z',
+          dueDate: '2024-01-25',
+          tags: ['進行中', 'テスト'],
           matrix: {
-            importance: 'low',
-            urgency: 'low'
+            importance: 'high',
+            urgency: 'high'
+          }
+        }
+      ];
+    } else {
+      // 新しく作成されたプロジェクトまたはその他のプロジェクト
+      mockProject = {
+        id: projectId,
+        name: '新しいプロジェクト',
+        description: '新しく作成されたプロジェクトです',
+        status: 'active',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        memberCount: 1
+      };
+
+      mockTasks = [
+        {
+          id: '1',
+          projectId: projectId,
+          title: 'プロジェクトの初期設定',
+          description: 'プロジェクトの基本設定を行います',
+          status: 'todo',
+          priority: 'high',
+          createdBy: 'user1',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 7日後
+          tags: ['初期設定', '重要'],
+          matrix: {
+            importance: 'high',
+            urgency: 'high'
           }
         }
       ];
@@ -304,60 +235,102 @@ export default function ProjectDetailPage() {
     setNewTask({
       title: '',
       description: '',
-      priority: 'medium',
-      matrix: { importance: 'high', urgency: 'high' }
+      priority: 'high',
+      matrix: {
+        importance: 'high',
+        urgency: 'high'
+      }
     });
     setShowCreateTaskModal(false);
   };
 
+  const handleDeleteTask = async (taskId: string) => {
+    try {
+      const response = await fetch(`/api/projects/${projectId}/tasks/${taskId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success) {
+          setTasks(prev => prev.filter(task => task.id !== taskId));
+        }
+      }
+    } catch (error) {
+      console.error('タスク削除エラー:', error);
+      // エラーの場合はローカル状態のみ更新
+      setTasks(prev => prev.filter(task => task.id !== taskId));
+    }
+  };
+
+  const handleUpdateTaskStatus = async (taskId: string, newStatus: Task['status']) => {
+    try {
+      const response = await fetch(`/api/projects/${projectId}/tasks/${taskId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success) {
+          setTasks(prev => prev.map(task => 
+            task.id === taskId ? { ...task, status: newStatus, updatedAt: new Date().toISOString() } : task
+          ));
+        }
+      }
+    } catch (error) {
+      console.error('タスクステータス更新エラー:', error);
+      // エラーの場合はローカル状態のみ更新
+      setTasks(prev => prev.map(task => 
+        task.id === taskId ? { ...task, status: newStatus, updatedAt: new Date().toISOString() } : task
+      ));
+    }
+  };
+
+  // getStatusBadge関数の修正
   const getStatusBadge = (status: Task['status']) => {
-    switch (status) {
-      case 'todo':
-        return <Badge variant="outline">未着手</Badge>;
-      case 'in_progress':
-        return <Badge variant="info">進行中</Badge>;
-      case 'done':
-        return <Badge variant="success">完了</Badge>;
-      case 'archived':
-        return <Badge variant="default">アーカイブ</Badge>;
-      default:
-        return <Badge variant="default">{status}</Badge>;
-    }
-  };
-
-  const getPriorityBadge = (priority: Task['priority']) => {
-    switch (priority) {
-      case 'urgent':
-        return <Badge variant="danger">緊急</Badge>;
-      case 'high':
-        return <Badge variant="warning">高</Badge>;
-      case 'medium':
-        return <Badge variant="info">中</Badge>;
-      case 'low':
-        return <Badge variant="outline">低</Badge>;
-      default:
-        return <Badge variant="default">{priority}</Badge>;
-    }
-  };
-
-  const getMatrixQuadrant = (importance: string, urgency: string) => {
-    const key = `${importance}-${urgency}`;
-    const quadrants = {
-      'high-high': { label: '重要・緊急', color: 'bg-red-100 border-red-300 text-red-800' },
-      'high-low': { label: '重要・非緊急', color: 'bg-yellow-100 border-yellow-300 text-yellow-800' },
-      'low-high': { label: '非重要・緊急', color: 'bg-blue-100 border-blue-300 text-blue-800' },
-      'low-low': { label: '非重要・非緊急', color: 'bg-gray-100 border-gray-300 text-gray-800' }
+    const statusConfig = {
+      todo: { label: '未着手', color: 'bg-gray-100 text-gray-800' },
+      in_progress: { label: '進行中', color: 'bg-blue-100 text-blue-800' },
+      done: { label: '完了', color: 'bg-green-100 text-green-800' },
+      archived: { label: 'アーカイブ', color: 'bg-gray-100 text-gray-600' }
     };
-    return quadrants[key as keyof typeof quadrants] || quadrants['low-low'];
+    
+    const config = statusConfig[status];
+    return (
+      <Badge className={config.color}>
+        {config.label}
+      </Badge>
+    );
+  };
+  
+  // getPriorityBadge関数の修正
+  const getPriorityBadge = (priority: Task['priority']) => {
+    const priorityConfig = {
+      low: { label: '低', color: 'bg-gray-100 text-gray-800' },
+      medium: { label: '中', color: 'bg-yellow-100 text-yellow-800' },
+      high: { label: '高', color: 'bg-orange-100 text-orange-800' },
+      urgent: { label: '緊急', color: 'bg-red-100 text-red-800' }
+    };
+    
+    const config = priorityConfig[priority];
+    return (
+      <Badge className={config.color}>
+        {config.label}
+      </Badge>
+    );
   };
 
-  if (loading) {
+  if (authLoading || loading) {
     return (
       <Layout>
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600 dark:text-gray-400">プロジェクトを読み込み中...</p>
+            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="mt-4 text-gray-600">プロジェクトを読み込み中...</p>
           </div>
         </div>
       </Layout>
@@ -367,11 +340,10 @@ export default function ProjectDetailPage() {
   if (!project) {
     return (
       <Layout>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-              プロジェクトが見つかりません
-            </h1>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">プロジェクトが見つかりません</h2>
+            <p className="text-gray-600 mb-6">指定されたプロジェクトは存在しないか、アクセス権限がありません。</p>
             <Link href="/projects">
               <Button>プロジェクト一覧に戻る</Button>
             </Link>
@@ -381,299 +353,148 @@ export default function ProjectDetailPage() {
     );
   }
 
+  const todoTasks = tasks.filter(task => task.status === 'todo');
+  const inProgressTasks = tasks.filter(task => task.status === 'in_progress');
+  const doneTasks = tasks.filter(task => task.status === 'done');
+  const archivedTasks = tasks.filter(task => task.status === 'archived');
+
   return (
     <Layout>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* プロジェクトヘッダー */}
         <div className="mb-8">
-          <div className="flex items-center mb-4">
-            <Link href="/projects" className="text-blue-600 hover:text-blue-500 mr-2">
-              ← プロジェクト一覧
-            </Link>
-          </div>
-          <div className="flex justify-between items-start">
+          <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-                {project.name}
-              </h1>
-              <p className="text-gray-600 dark:text-gray-400 mb-4">
-                {project.description}
-              </p>
-              <div className="flex items-center space-x-4">
-                <Badge variant="success">進行中</Badge>
-                <span className="text-sm text-gray-500">{project.memberCount}人のメンバー</span>
-                <span className="text-sm text-gray-500">更新日: {project.updatedAt}</span>
-              </div>
+              <h1 className="text-3xl font-bold text-gray-900">{project.name}</h1>
+              <p className="text-gray-600 mt-2">{project.description}</p>
             </div>
             <div className="flex space-x-3">
-                <Button 
-                  variant="outline" 
-                  onClick={() => setShowExportDialog(true)}
-                >
-                  エクスポート
-                </Button>
-                <Link href={`/projects/${projectId}/matrix`}>
-                  <Button variant="outline">
-                    マトリクス表示
-                  </Button>
-                </Link>
-                <Link href={`/projects/${projectId}/settings`}>
-                  <Button variant="outline">
-                    設定
-                  </Button>
-                </Link>
-                <Button onClick={() => setShowCreateTaskModal(true)}>
-                  新しいタスク
-                </Button>
-              </div>
+              <Button
+                onClick={() => setShowExportDialog(true)}
+                variant="outline"
+              >
+                エクスポート
+              </Button>
+              <Link href={`/projects/${projectId}/settings`}>
+                <Button variant="outline">設定</Button>
+              </Link>
+              <Link href={`/projects/${projectId}/matrix`}>
+                <Button>マトリクス表示</Button>
+              </Link>
+            </div>
+          </div>
+          
+          <div className="flex items-center space-x-6 text-sm text-gray-500">
+            <span>メンバー: {project.memberCount}人</span>
+            <span>作成日: {new Date(project.createdAt).toLocaleDateString('ja-JP')}</span>
+            <span>更新日: {new Date(project.updatedAt).toLocaleDateString('ja-JP')}</span>
           </div>
         </div>
 
+        {/* タスク作成ボタン */}
+        <div className="mb-6">
+          <Button onClick={() => setShowCreateTaskModal(true)}>
+            新しいタスクを作成
+          </Button>
+        </div>
+
+        {/* タスク統計 */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+          <Card>
+            <CardContent className="p-4">
+              <div className="text-2xl font-bold text-gray-600">{todoTasks.length}</div>
+              <div className="text-sm text-gray-500">未着手</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4">
+              <div className="text-2xl font-bold text-blue-600">{inProgressTasks.length}</div>
+              <div className="text-sm text-gray-500">進行中</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4">
+              <div className="text-2xl font-bold text-green-600">{doneTasks.length}</div>
+              <div className="text-sm text-gray-500">完了</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4">
+              <div className="text-2xl font-bold text-red-600">{archivedTasks.length}</div>
+              <div className="text-sm text-gray-500">アーカイブ</div>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* タスク一覧 */}
-        <div className="space-y-6">
-          {/* フィルター・表示オプション */}
-           <div className="flex justify-between items-center">
-             <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-               現場タスク一覧 ({tasks.length})
-             </h2>
-             <div className="flex space-x-4">
-               <select 
-                 value="all" 
-                 onChange={() => {}}
-                 className="w-48 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
-               >
-                 <option value="all">全てのミニプロジェクト</option>
-                 <option value="design">デザインカンプの作成</option>
-                 <option value="content">コンテンツの整理</option>
-                 <option value="development">開発作業</option>
-                 <option value="testing">テスト・検証</option>
-               </select>
-               <select 
-                 value="all" 
-                 onChange={() => {}}
-                 className="w-32 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
-               >
-                 <option value="all">全ての状態</option>
-                 <option value="pending">未着手</option>
-                 <option value="in_progress">進行中</option>
-                 <option value="completed">完了</option>
-               </select>
-             </div>
-           </div>
-
-          {/* ミニプロジェクト別タスク表示 */}
-          <div className="space-y-8">
-            {/* デザインカンプの作成 */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                    デザインカンプの作成
-                  </h3>
-                  <div className="flex items-center space-x-2">
-                    <Badge variant="warning">進行中</Badge>
-                    <span className="text-sm text-gray-500">3/5 完了</span>
-                  </div>
-                </div>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  トップページのデザインカンプを作成する
-                </p>
-              </div>
-              <div className="p-6">
-                <div className="grid grid-cols-1 gap-4">
-                  {tasks.filter(task => task.title.includes('デザイン')).map((task) => {
-                    const quadrant = getMatrixQuadrant(task.matrix.importance, task.matrix.urgency);
-                    return (
-                      <div key={task.id} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 hover:shadow-md transition-shadow">
-                        <div className="flex justify-between items-start mb-3">
-                          <h4 className="text-base font-medium text-gray-900 dark:text-gray-100">
-                            {task.title}
-                          </h4>
-                          <div className="flex space-x-2">
-                            {getStatusBadge(task.status)}
-                            {getPriorityBadge(task.priority)}
-                          </div>
-                        </div>
-                        
-                        {task.description && (
-                          <p className="text-gray-600 dark:text-gray-400 mb-3 text-sm">
-                            {task.description}
-                          </p>
-                        )}
-                        
-                        <div className="flex justify-between items-center text-sm">
-                           <div className="flex items-center space-x-4">
-                             <span className="text-gray-500">
-                               重要度: {task.matrix.importance === 'high' ? '高' : '低'}
-                             </span>
-                             <span className="text-gray-500">
-                               緊急度: {task.matrix.urgency === 'high' ? '高' : '低'}
-                             </span>
-                             <Badge variant="outline" className="text-xs">
-                               {quadrant.label}
-                             </Badge>
-                           </div>
-                           <span className="text-gray-500">
-                             作成日: {new Date(task.createdAt).toLocaleDateString('ja-JP')}
-                           </span>
-                         </div>
-                      </div>
-                    );
-                  })}
-                  {tasks.filter(task => task.title.includes('デザイン')).length === 0 && (
-                    <div className="text-center py-8 text-gray-500">
-                      このミニプロジェクトにはまだタスクがありません
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* コンテンツの整理 */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                    コンテンツの整理
-                  </h3>
-                  <div className="flex items-center space-x-2">
-                    <Badge variant="info">未着手</Badge>
-                    <span className="text-sm text-gray-500">0/3 完了</span>
-                  </div>
-                </div>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  既存コンテンツの整理と新規コンテンツの企画
-                </p>
-              </div>
-              <div className="p-6">
-                <div className="grid grid-cols-1 gap-4">
-                  {tasks.filter(task => task.title.includes('コンテンツ')).map((task) => {
-                    const quadrant = getMatrixQuadrant(task.matrix.importance, task.matrix.urgency);
-                    return (
-                      <div key={task.id} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 hover:shadow-md transition-shadow">
-                        <div className="flex justify-between items-start mb-3">
-                          <h4 className="text-base font-medium text-gray-900 dark:text-gray-100">
-                            {task.title}
-                          </h4>
-                          <div className="flex space-x-2">
-                            {getStatusBadge(task.status)}
-                            {getPriorityBadge(task.priority)}
-                          </div>
-                        </div>
-                        
-                        {task.description && (
-                          <p className="text-gray-600 dark:text-gray-400 mb-3 text-sm">
-                            {task.description}
-                          </p>
-                        )}
-                        
-                        <div className="flex justify-between items-center text-sm">
-                           <div className="flex items-center space-x-4">
-                             <span className="text-gray-500">
-                               重要度: {task.matrix.importance === 'high' ? '高' : '低'}
-                             </span>
-                             <span className="text-gray-500">
-                               緊急度: {task.matrix.urgency === 'high' ? '高' : '低'}
-                             </span>
-                             <Badge variant="outline" className="text-xs">
-                               {quadrant.label}
-                             </Badge>
-                           </div>
-                           <span className="text-gray-500">
-                             作成日: {new Date(task.createdAt).toLocaleDateString('ja-JP')}
-                           </span>
-                         </div>
-                      </div>
-                    );
-                  })}
-                  {tasks.filter(task => task.title.includes('コンテンツ')).length === 0 && (
-                    <div className="text-center py-8 text-gray-500">
-                      このミニプロジェクトにはまだタスクがありません
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* その他のタスク */}
-            {tasks.filter(task => !task.title.includes('デザイン') && !task.title.includes('コンテンツ')).length > 0 && (
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-                <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                      その他のタスク
-                    </h3>
-                    <div className="flex items-center space-x-2">
-                      <Badge variant="outline">分類なし</Badge>
-                      <span className="text-sm text-gray-500">
-                        {tasks.filter(task => !task.title.includes('デザイン') && !task.title.includes('コンテンツ')).length} 件
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div className="p-6">
-                  <div className="grid grid-cols-1 gap-4">
-                    {tasks.filter(task => !task.title.includes('デザイン') && !task.title.includes('コンテンツ')).map((task) => {
-                      const quadrant = getMatrixQuadrant(task.matrix.importance, task.matrix.urgency);
-                      return (
-                        <div key={task.id} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 hover:shadow-md transition-shadow">
-                          <div className="flex justify-between items-start mb-3">
-                            <h4 className="text-base font-medium text-gray-900 dark:text-gray-100">
-                              {task.title}
-                            </h4>
-                            <div className="flex space-x-2">
-                              {getStatusBadge(task.status)}
-                              {getPriorityBadge(task.priority)}
-                            </div>
-                          </div>
-                          
-                          {task.description && (
-                            <p className="text-gray-600 dark:text-gray-400 mb-3 text-sm">
-                              {task.description}
-                            </p>
-                          )}
-                          
-                          <div className="flex justify-between items-center text-sm">
-                             <div className="flex items-center space-x-4">
-                               <span className="text-gray-500">
-                                 重要度: {task.matrix.importance === 'high' ? '高' : '低'}
-                               </span>
-                               <span className="text-gray-500">
-                                 緊急度: {task.matrix.urgency === 'high' ? '高' : '低'}
-                               </span>
-                               <Badge variant="outline" className="text-xs">
-                                 {quadrant.label}
-                               </Badge>
-                             </div>
-                             <span className="text-gray-500">
-                               作成日: {new Date(task.createdAt).toLocaleDateString('ja-JP')}
-                             </span>
-                           </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold text-gray-900">タスク一覧</h2>
           
-          {tasks.length === 0 && (
-            <div className="text-center py-12">
-              <div className="w-24 h-24 mx-auto mb-4 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center">
-                <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
-                タスクがありません
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-6">
-                最初のタスクを作成して始めましょう
-              </p>
-              <Button onClick={() => setShowCreateTaskModal(true)}>
-                タスクを作成
-              </Button>
+          {tasks.length === 0 ? (
+            <Card>
+              <CardContent className="p-8 text-center">
+                <p className="text-gray-500">まだタスクがありません。新しいタスクを作成してください。</p>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="space-y-3">
+              {tasks.map((task) => (
+                <Card key={task.id} className="hover:shadow-md transition-shadow">
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-3 mb-2">
+                          <h3 className="font-medium text-gray-900">{task.title}</h3>
+                          {getStatusBadge(task.status)}
+                          {getPriorityBadge(task.priority)}
+                        </div>
+                        
+                        {task.description && (
+                          <p className="text-gray-600 text-sm mb-2">{task.description}</p>
+                        )}
+                        
+                        <div className="flex items-center space-x-4 text-xs text-gray-500">
+                          {task.dueDate && (
+                            <span>期限: {new Date(task.dueDate).toLocaleDateString('ja-JP')}</span>
+                          )}
+                          <span>作成: {new Date(task.createdAt).toLocaleDateString('ja-JP')}</span>
+                          {task.tags && task.tags.length > 0 && (
+                            <div className="flex space-x-1">
+                              {task.tags.map((tag, index) => (
+                                <Badge key={index} variant="outline" className="text-xs">
+                                  {tag}
+                                </Badge>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center space-x-2">
+                        <Select
+                          value={task.status}
+                          onChange={(value) => handleUpdateTaskStatus(task.id, value as Task['status'])}
+                          options={[
+                            { value: 'todo', label: '未着手' },
+                            { value: 'in_progress', label: '進行中' },
+                            { value: 'done', label: '完了' },
+                            { value: 'archived', label: 'アーカイブ' }
+                          ]}
+                        />
+                        
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDeleteTask(task.id)}
+                          className="text-red-600 hover:text-red-700"
+                        >
+                          削除
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           )}
         </div>
@@ -682,71 +503,85 @@ export default function ProjectDetailPage() {
         <Modal
           isOpen={showCreateTaskModal}
           onClose={() => setShowCreateTaskModal(false)}
-          title="新しいタスク"
-          size="lg"
+          title="新しいタスクを作成"
         >
           <div className="space-y-4">
-            <Input
-              label="タスク名"
-              value={newTask.title}
-              onChange={(e) => setNewTask(prev => ({ ...prev, title: e.target.value }))}
-              placeholder="タスク名を入力"
-              required
-            />
-
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                説明（任意）
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                タスク名 *
+              </label>
+              <Input
+                value={newTask.title}
+                onChange={(e) => setNewTask(prev => ({ ...prev, title: e.target.value }))}
+                placeholder="タスク名を入力してください"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                説明
               </label>
               <textarea
                 value={newTask.description}
                 onChange={(e) => setNewTask(prev => ({ ...prev, description: e.target.value }))}
+                placeholder="タスクの詳細を入力してください"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
-                placeholder="タスクの詳細を入力"
               />
             </div>
-
-            <Select
-              label="優先度"
-              value={newTask.priority}
-              onChange={(value) => setNewTask(prev => ({ ...prev, priority: value as Task['priority'] }))}
-              options={[
-                { value: 'low', label: '低' },
-                { value: 'medium', label: '中' },
-                { value: 'high', label: '高' },
-                { value: 'urgent', label: '緊急' }
-              ]}
-            />
-
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                優先度
+              </label>
+              <Select
+                value={newTask.priority}
+                onChange={(value) => setNewTask(prev => ({ ...prev, priority: value as Task['priority'] }))}
+                options={[
+                  { value: 'low', label: '低' },
+                  { value: 'medium', label: '中' },
+                  { value: 'high', label: '高' },
+                  { value: 'urgent', label: '緊急' }
+                ]}
+              />
+            </div>
+            
             <div className="grid grid-cols-2 gap-4">
-              <Select
-                label="重要度"
-                value={newTask.matrix.importance}
-                onChange={(value) => setNewTask(prev => ({ 
-                  ...prev, 
-                  matrix: { ...prev.matrix, importance: value as 'high' | 'low' }
-                }))}
-                options={[
-                  { value: 'high', label: '重要' },
-                  { value: 'low', label: '非重要' }
-                ]}
-              />
-
-              <Select
-                label="緊急度"
-                value={newTask.matrix.urgency}
-                onChange={(value) => setNewTask(prev => ({ 
-                  ...prev, 
-                  matrix: { ...prev.matrix, urgency: value as 'high' | 'low' }
-                }))}
-                options={[
-                  { value: 'high', label: '緊急' },
-                  { value: 'low', label: '非緊急' }
-                ]}
-              />
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  重要度
+                </label>
+                <Select
+                  value={newTask.matrix.importance}
+                  onChange={(value) => setNewTask(prev => ({ 
+                    ...prev, 
+                    matrix: { ...prev.matrix, importance: value as 'high' | 'low' }
+                  }))}
+                  options={[
+                    { value: 'low', label: '低' },
+                    { value: 'high', label: '高' }
+                  ]}
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  緊急度
+                </label>
+                <Select
+                  value={newTask.matrix.urgency}
+                  onChange={(value) => setNewTask(prev => ({ 
+                    ...prev, 
+                    matrix: { ...prev.matrix, urgency: value as 'high' | 'low' }
+                  }))}
+                  options={[
+                    { value: 'low', label: '低' },
+                    { value: 'high', label: '高' }
+                  ]}
+                />
+              </div>
             </div>
-
+            
             <div className="flex justify-end space-x-3 pt-4">
               <Button
                 variant="outline"
