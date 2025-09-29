@@ -127,11 +127,11 @@ export default function CreateProjectPage() {
   ];
 
   React.useEffect(() => {
-    if (!user) {
+    if (!authLoading && !isAuthenticated) {
       router.push('/auth/login');
       return;
     }
-  }, [user, router]);
+  }, [authLoading, isAuthenticated, router]);
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -198,7 +198,7 @@ export default function CreateProjectPage() {
     }));
   };
 
-  if (!isAuthenticated) {
+  if (authLoading) {
     return (
       <Layout>
         <div className="flex items-center justify-center min-h-screen">
@@ -209,6 +209,10 @@ export default function CreateProjectPage() {
         </div>
       </Layout>
     );
+  }
+
+  if (!isAuthenticated) {
+    return null; // useEffectでリダイレクトされるため、何も表示しない
   }
 
   return (
