@@ -80,3 +80,29 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const ProjectService = await getProjectService();
+    const { searchParams } = new URL(request.url);
+    const projectId = searchParams.get('id');
+
+    if (!projectId) {
+      return NextResponse.json(
+        { success: false, error: 'Project ID is required' },
+        { status: 400 }
+      );
+    }
+
+    // プロジェクトを削除
+    await ProjectService.delete(projectId);
+
+    return NextResponse.json({ success: true, data: { deleted: true } });
+  } catch (error) {
+    console.error('Error deleting project:', error);
+    return NextResponse.json(
+      { success: false, error: 'Failed to delete project', details: error instanceof Error ? error.message : 'Unknown error' },
+      { status: 500 }
+    );
+  }
+}

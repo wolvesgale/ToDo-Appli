@@ -130,35 +130,6 @@ export default function ProjectsPage() {
             <p className="mt-4 text-gray-600 dark:text-gray-400">プロジェクトを読み込み中...</p>
           </div>
         </div>
-        {/* 削除確認モーダル */}
-        {showDeleteModal && projectToDelete && (
-          <Modal
-            isOpen={showDeleteModal}
-            onClose={() => setShowDeleteModal(false)}
-            title="プロジェクトを削除"
-          >
-            <div className="space-y-4">
-              <p className="text-gray-600">
-                「{projectToDelete.name}」を削除してもよろしいですか？
-                この操作は取り消すことができません。
-              </p>
-              <div className="flex justify-end space-x-2">
-                <Button
-                  variant="outline"
-                  onClick={() => setShowDeleteModal(false)}
-                >
-                  キャンセル
-                </Button>
-                <Button
-                  variant="danger"
-                  onClick={handleDeleteProject}
-                >
-                  削除
-                </Button>
-              </div>
-            </div>
-          </Modal>
-        )}
       </Layout>
     );
   }
@@ -286,6 +257,36 @@ export default function ProjectsPage() {
             </div>
           </div>
         </Modal>
+
+        {/* 削除確認モーダル */}
+        {showDeleteModal && projectToDelete && (
+          <Modal
+            isOpen={showDeleteModal}
+            onClose={() => setShowDeleteModal(false)}
+            title="プロジェクトを削除"
+          >
+            <div className="space-y-4">
+              <p className="text-gray-600">
+                「{projectToDelete.name}」を削除してもよろしいですか？
+                この操作は取り消すことができません。
+              </p>
+              <div className="flex justify-end space-x-2">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowDeleteModal(false)}
+                >
+                  キャンセル
+                </Button>
+                <Button
+                  variant="danger"
+                  onClick={handleDeleteProject}
+                >
+                  削除
+                </Button>
+              </div>
+            </div>
+          </Modal>
+        )}
       </div>
     </Layout>
   );

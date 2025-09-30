@@ -10,6 +10,7 @@ import { Select } from '@/components/ui/Select';
 import { Badge } from '@/components/ui/Badge';
 import { Modal } from '@/components/ui/Modal';
 import { Textarea } from '@/components/ui/Textarea';
+import UserSelect from '@/components/ui/UserSelect';
 import { Loading } from '@/components/ui/Loading';
 import {
   Stage,
@@ -947,17 +948,12 @@ export default function ProjectMatrixPage() {
             value={taskForm.dueDate}
             onChange={(e) => setTaskForm(prev => ({ ...prev, dueDate: e.target.value }))}
           />
-          <Select
+          <UserSelect
             label="担当者"
             value={taskForm.assignees[0] || ''}
             onChange={(value) => setTaskForm(prev => ({ ...prev, assignees: value ? [value] : [] }))}
-            options={[
-              { value: '', label: '担当者を選択' },
-              ...matrixData.projectMembers.map((member: ProjectMember) => ({
-                value: member.id,
-                label: member.name,
-              })),
-            ]}
+            placeholder="担当者を選択"
+            projectId={params?.id ? (typeof params.id === 'string' ? params.id : params.id[0]) : undefined}
           />
           <Textarea
             label="コメント"

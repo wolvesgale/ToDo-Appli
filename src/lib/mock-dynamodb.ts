@@ -134,6 +134,116 @@ export class MockTargetService {
   }
 }
 
+// Task型をインポート
+import { Task } from '@/types/database';
+
+// モックタスクデータ
+let mockTasks: Task[] = [
+  {
+    id: '1',
+    projectId: '1',
+    title: 'サンプルタスク1',
+    description: 'これはサンプルタスクです',
+    status: 'in_progress',
+    priority: 'high',
+    assigneeId: 'user1',
+    createdBy: 'user1',
+    createdAt: '2024-01-15T10:00:00Z',
+    updatedAt: '2024-01-20T15:30:00Z',
+    dueDate: '2024-01-25',
+    tags: ['サンプル', 'テスト'],
+    matrix: {
+      importance: 'high',
+      urgency: 'high'
+    }
+  },
+  {
+    id: '2',
+    projectId: '1',
+    title: 'サンプルタスク2',
+    description: '2番目のサンプルタスクです',
+    status: 'todo',
+    priority: 'medium',
+    assigneeId: 'user2',
+    createdBy: 'user1',
+    createdAt: '2024-01-16T09:00:00Z',
+    updatedAt: '2024-01-16T09:00:00Z',
+    dueDate: '2024-01-30',
+    tags: ['サンプル', 'テスト'],
+    matrix: {
+      importance: 'high',
+      urgency: 'low'
+    }
+  },
+  {
+    id: '3',
+    projectId: '2',
+    title: 'プロジェクト2のタスク',
+    description: 'プロジェクト2用のタスクです',
+    status: 'done',
+    priority: 'low',
+    assigneeId: 'user1',
+    createdBy: 'user2',
+    createdAt: '2024-01-17T14:00:00Z',
+    updatedAt: '2024-01-18T16:00:00Z',
+    dueDate: '2024-01-20',
+    completedAt: '2024-01-18T16:00:00Z',
+    tags: ['完了'],
+    matrix: {
+      importance: 'low',
+      urgency: 'low'
+    }
+  }
+];
+
+export class MockTaskService {
+  // タスク作成
+  static async create(taskData: Omit<Task, 'id' | 'createdAt' | 'updatedAt'>): Promise<Task> {
+    const task: Task = {
+      ...taskData,
+      id: generateId(),
+      createdAt: getCurrentTimestamp(),
+      updatedAt: getCurrentTimestamp(),
+    };
+
+    mockTasks.push(task);
+    return task;
+  }
+
+  // プロジェクトのタスク一覧取得
+  static async getByProjectId(projectId: string): Promise<Task[]> {
+    return mockTasks.filter(task => task.projectId === projectId);
+  }
+
+  // タスク取得
+  static async getById(projectId: string, taskId: string): Promise<Task | null> {
+    return mockTasks.find(task => task.projectId === projectId && task.id === taskId) || null;
+  }
+
+  // タスク更新
+  static async update(projectId: string, taskId: string, updates: Partial<Task>): Promise<Task | null> {
+    const taskIndex = mockTasks.findIndex(task => task.projectId === projectId && task.id === taskId);
+    if (taskIndex === -1) {
+      return null;
+    }
+
+    mockTasks[taskIndex] = {
+      ...mockTasks[taskIndex],
+      ...updates,
+      updatedAt: getCurrentTimestamp(),
+    };
+
+    return mockTasks[taskIndex];
+  }
+
+  // タスク削除
+  static async delete(projectId: string, taskId: string): Promise<boolean> {
+    const initialLength = mockTasks.length;
+    mockTasks = mockTasks.filter(task => !(task.projectId === projectId && task.id === taskId));
+    return mockTasks.length < initialLength;
+  }
+}
+
 export class MockProjectService {
   // プロジェクト作成
   static async create(projectData: Omit<Project, 'id' | 'createdAt' | 'updatedAt'>): Promise<Project> {
@@ -177,5 +287,153 @@ export class MockProjectService {
   // プロジェクト削除
   static async delete(projectId: string): Promise<void> {
     mockProjects = mockProjects.filter(project => project.id !== projectId);
+  }
+}
+
+// User型をインポート
+import { User } from '@/types/database';
+
+// モックユーザーデータ
+let mockUsers: User[] = [
+  {
+    id: 'user1',
+    email: 'admin@example.com',
+    name: '田中太郎',
+    createdAt: '2024-01-15T10:00:00Z',
+    updatedAt: '2024-01-15T10:00:00Z',
+    isActive: true,
+    subscription: {
+      plan: 'pro',
+      status: 'active',
+      currentPeriodEnd: '2024-12-31T23:59:59Z'
+    }
+  },
+  {
+    id: 'user2',
+    email: 'user@example.com',
+    name: '佐藤花子',
+    createdAt: '2024-01-16T09:00:00Z',
+    updatedAt: '2024-01-16T09:00:00Z',
+    isActive: true,
+    subscription: {
+      plan: 'free',
+      status: 'active',
+      currentPeriodEnd: '2024-12-31T23:59:59Z'
+    }
+  },
+  {
+    id: 'user3',
+    email: 'suzuki@example.com',
+    name: '鈴木一郎',
+    createdAt: '2024-01-17T14:00:00Z',
+    updatedAt: '2024-01-17T14:00:00Z',
+    isActive: true,
+    subscription: {
+      plan: 'free',
+      status: 'active',
+      currentPeriodEnd: '2024-12-31T23:59:59Z'
+    }
+  },
+  {
+    id: 'user4',
+    email: 'yamada@example.com',
+    name: '山田美咲',
+    createdAt: '2024-01-18T11:00:00Z',
+    updatedAt: '2024-01-18T11:00:00Z',
+    isActive: true,
+    subscription: {
+      plan: 'pro',
+      status: 'active',
+      currentPeriodEnd: '2024-12-31T23:59:59Z'
+    }
+  },
+  {
+    id: 'user5',
+    email: 'watanabe@example.com',
+    name: '渡辺健太',
+    createdAt: '2024-01-19T16:00:00Z',
+    updatedAt: '2024-01-19T16:00:00Z',
+    isActive: true,
+    subscription: {
+      plan: 'enterprise',
+      status: 'active',
+      currentPeriodEnd: '2024-12-31T23:59:59Z'
+    }
+  }
+];
+
+export class MockUserService {
+  // ユーザー作成
+  static async create(userData: Omit<User, 'id' | 'createdAt' | 'updatedAt'>): Promise<User> {
+    const user: User = {
+      ...userData,
+      id: generateId(),
+      createdAt: getCurrentTimestamp(),
+      updatedAt: getCurrentTimestamp(),
+    };
+
+    mockUsers.push(user);
+    return user;
+  }
+
+  // 全ユーザー取得
+  static async getAll(): Promise<User[]> {
+    return mockUsers.filter(user => user.isActive);
+  }
+
+  // ユーザー取得（ID）
+  static async getById(userId: string): Promise<User | null> {
+    return mockUsers.find(user => user.id === userId && user.isActive) || null;
+  }
+
+  // ユーザー取得（メールアドレス）
+  static async getByEmail(email: string): Promise<User | null> {
+    return mockUsers.find(user => user.email === email && user.isActive) || null;
+  }
+
+  // ユーザー検索（名前部分一致）
+  static async searchByName(nameQuery: string, limit: number = 20): Promise<User[]> {
+    return mockUsers
+      .filter(user => user.isActive && user.name.includes(nameQuery))
+      .slice(0, limit);
+  }
+
+  // ユーザー更新
+  static async update(userId: string, updates: Partial<User>): Promise<User | null> {
+    const userIndex = mockUsers.findIndex(user => user.id === userId);
+    if (userIndex === -1) {
+      return null;
+    }
+
+    mockUsers[userIndex] = {
+      ...mockUsers[userIndex],
+      ...updates,
+      updatedAt: getCurrentTimestamp(),
+    };
+
+    return mockUsers[userIndex];
+  }
+
+  // ユーザー削除（論理削除）
+  static async delete(userId: string): Promise<boolean> {
+    const userIndex = mockUsers.findIndex(user => user.id === userId);
+    if (userIndex === -1) {
+      return false;
+    }
+
+    mockUsers[userIndex] = {
+      ...mockUsers[userIndex],
+      isActive: false,
+      updatedAt: getCurrentTimestamp(),
+    };
+
+    return true;
+  }
+
+  // プロジェクトメンバー候補取得（プロジェクトに参加していないユーザー）
+  static async getAvailableMembers(projectId: string): Promise<User[]> {
+    // 実際の実装では、プロジェクトメンバーテーブルと結合して除外する
+    // ここでは簡易実装として全ユーザーを返す
+    return mockUsers.filter(user => user.isActive);
   }
 }
