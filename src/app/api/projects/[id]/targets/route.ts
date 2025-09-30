@@ -78,10 +78,13 @@ export async function PUT(
     const body = await request.json();
     
     // ターゲットを更新
-    const target = await TargetService.update(body.targetId, {
+    const target = await TargetService.update(projectId, body.id, {
       name: body.name,
-      description: body.description,
-      status: body.status,
+      displayName: body.displayName || body.name,
+      email: body.email,
+      order: body.order,
+      archived: body.archived,
+      metadata: body.metadata || {},
     });
 
     return NextResponse.json({ success: true, data: target });
@@ -113,7 +116,7 @@ export async function DELETE(
     }
 
     // ターゲットを削除
-    await TargetService.delete(targetId);
+    await TargetService.delete(projectId, targetId);
 
     return NextResponse.json({ success: true });
   } catch (error) {

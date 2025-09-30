@@ -246,7 +246,7 @@ export default function ProjectDetailPage() {
 
   const handleDeleteTask = async (taskId: string) => {
     try {
-      const response = await fetch(`/api/projects/${projectId}/tasks/${taskId}`, {
+      const response = await fetch(`/api/projects/${projectId}/tasks?taskId=${taskId}`, {
         method: 'DELETE',
       });
 
@@ -265,12 +265,12 @@ export default function ProjectDetailPage() {
 
   const handleUpdateTaskStatus = async (taskId: string, newStatus: Task['status']) => {
     try {
-      const response = await fetch(`/api/projects/${projectId}/tasks/${taskId}`, {
+      const response = await fetch(`/api/projects/${projectId}/tasks`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ status: newStatus }),
+        body: JSON.stringify({ id: taskId, status: newStatus }),
       });
 
       if (response.ok) {

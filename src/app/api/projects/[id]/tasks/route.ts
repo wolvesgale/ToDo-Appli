@@ -70,6 +70,32 @@ export async function PUT(
   });
 }
 
+// タスク部分更新（ステータス更新など）
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  return withErrorHandling(async () => {
+    const projectId = params.id;
+    const body = await request.json();
+    
+    // PATCHでは送信されたフィールドのみ更新
+    const updates: any = {};
+    if (body.status !== undefined) updates.status = body.status;
+    if (body.title !== undefined) updates.title = body.title;
+    if (body.description !== undefined) updates.description = body.description;
+    if (body.priority !== undefined) updates.priority = body.priority;
+    if (body.assigneeId !== undefined) updates.assigneeId = body.assigneeId;
+    if (body.dueDate !== undefined) updates.dueDate = body.dueDate;
+    if (body.tags !== undefined) updates.tags = body.tags;
+    if (body.matrix !== undefined) updates.matrix = body.matrix;
+    
+    const updatedTask = await TaskService.update(projectId, body.id, updates);
+    
+    return NextResponse.json({ success: true, data: updatedTask });
+  });
+}
+
 // タスク削除
 export async function DELETE(
   request: NextRequest,

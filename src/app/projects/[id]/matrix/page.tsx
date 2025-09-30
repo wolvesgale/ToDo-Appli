@@ -362,25 +362,76 @@ export default function ProjectMatrixPage() {
     setShowAddTarget(false);
   };
 
-  const handleDeleteTarget = (targetId: string) => {
+  const handleDeleteTarget = async (targetId: string) => {
     if (confirm('この顧客を削除しますか？関連するタスクも削除されます。')) {
-      setMatrixData(prev => ({
-        ...prev,
-        targets: prev.targets.filter(target => target.id !== targetId),
-        tasks: prev.tasks.filter(task => task.targetId !== targetId),
-      }));
+      try {
+        const response = await fetch(`/api/projects/${params.id}/targets?targetId=${targetId}`, {
+          method: 'DELETE',
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success) {
+            setMatrixData(prev => ({
+              ...prev,
+              targets: prev.targets.filter(target => target.id !== targetId),
+              tasks: prev.tasks.filter(task => task.targetId !== targetId),
+            }));
+          }
+        }
+      } catch (error) {
+        console.error('顧客削除エラー:', error);
+        // エラーの場合はローカル状態のみ更新
+        setMatrixData(prev => ({
+          ...prev,
+          targets: prev.targets.filter(target => target.id !== targetId),
+          tasks: prev.tasks.filter(task => task.targetId !== targetId),
+        }));
+      }
     }
   };
 
-  const handleArchiveTarget = (targetId: string) => {
-    setMatrixData(prev => ({
-      ...prev,
-      targets: prev.targets.map(target =>
-        target.id === targetId
-          ? { ...target, archived: !target.archived, updatedAt: new Date().toISOString() }
-          : target
-      ),
-    }));
+  const handleArchiveTarget = async (targetId: string) => {
+    try {
+      const targetToUpdate = matrixData.targets.find(t => t.id === targetId);
+      if (!targetToUpdate) return;
+
+      const response = await fetch(`/api/projects/${params.id}/targets`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...targetToUpdate,
+          archived: !targetToUpdate.archived,
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success) {
+          setMatrixData(prev => ({
+            ...prev,
+            targets: prev.targets.map(target =>
+              target.id === targetId
+                ? { ...target, archived: !target.archived, updatedAt: new Date().toISOString() }
+                : target
+            ),
+          }));
+        }
+      }
+    } catch (error) {
+      console.error('顧客アーカイブエラー:', error);
+      // エラーの場合はローカル状態のみ更新
+      setMatrixData(prev => ({
+        ...prev,
+        targets: prev.targets.map(target =>
+          target.id === targetId
+            ? { ...target, archived: !target.archived, updatedAt: new Date().toISOString() }
+            : target
+        ),
+      }));
+    }
   };
 
   // タスク管理関数
@@ -718,7 +769,7 @@ export default function ProjectMatrixPage() {
                                 </td>
                                 {filteredTargets.map((target) => {
                                   const taskKey = `${stage.id}-${target.id}`;
-                                  const task = matrixData.tasks[taskKey];
+                                  const task = matrixData.tasks.find(t => t.stageId === stage.id && t.targetId === target.id);
                                   
                                   return (
                                     <td
@@ -740,7 +791,7 @@ export default function ProjectMatrixPage() {
                                           </div>
                                           {task.assignees.length > 0 && (
                                             <div className="text-xs text-gray-600 dark:text-gray-300">
-                                              担当: {task.assignees.map(id => 
+                                              担当: {task.assignees.map((id: string) => 
                                                 matrixData.projectMembers.find((m: ProjectMember) => m.id === id)?.name
                                               ).join(', ')}
                                             </div>

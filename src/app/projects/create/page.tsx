@@ -160,20 +160,29 @@ export default function CreateProjectPage() {
     setLoading(true);
 
     try {
-      // プロジェクトを作成（実際のAPIコールの代わりにモックデータを作成）
-      const projectData = {
-        id: Date.now().toString(),
-        name: formData.name,
-        description: formData.description,
-        color: formData.color,
-        template: formData.template,
-        status: 'active' as const,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
+      // APIを呼び出してプロジェクトを作成
+      const response = await fetch('/api/projects', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          description: formData.description,
+          color: formData.color,
+          template: formData.template,
+        }),
+      });
 
-      // 作成されたプロジェクトの詳細ページにリダイレクト
-      router.push(`/projects/${projectData.id}`);
+      if (response.ok) {
+        const data = await response.json();
+        // 作成されたプロジェクトの詳細ページにリダイレクト
+        router.push(`/projects/${data.data.id}`);
+      } else {
+        const errorData = await response.json();
+        console.error('プロジェクト作成エラー:', errorData);
+        setErrors({ submit: 'プロジェクトの作成に失敗しました。もう一度お試しください。' });
+      }
     } catch (error) {
       console.error('プロジェクト作成エラー:', error);
       setErrors({ submit: 'プロジェクトの作成に失敗しました。もう一度お試しください。' });
