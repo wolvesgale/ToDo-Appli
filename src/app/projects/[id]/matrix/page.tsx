@@ -677,143 +677,111 @@ export default function ProjectMatrixPage() {
               <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead className="bg-gray-50 dark:bg-gray-700">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider sticky left-0 bg-gray-50 dark:bg-gray-700 z-10">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider sticky left-0 bg-gray-50 dark:bg-gray-700 z-10 min-w-[200px] w-[200px]">
                       工程 / 顧客
                     </th>
-                    <Droppable droppableId="targets" direction="horizontal" type="target">
-                      {(provided) => (
-                        <th
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                          className="px-0 py-3"
-                        >
-                          <div className="flex">
-                            {filteredTargets.map((target, index) => (
-                              <Draggable key={target.id} draggableId={target.id} index={index}>
-                                {(provided) => (
-                                  <div
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider border-r border-gray-200 dark:border-gray-600 min-w-[200px] w-[200px]"
-                                  >
-                                    <div className="flex items-center justify-between">
-                                      <div>
-                                        <div className="font-semibold text-gray-900 dark:text-gray-100">{target.name}</div>
-                                        <div className="text-gray-400 dark:text-gray-500">{target.email}</div>
-                                      </div>
-                                      <div className="flex space-x-1">
-                                        <button
-                                          onClick={() => handleEditTarget(target)}
-                                          className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
-                                        >
-                                          編集
-                                        </button>
-                                        <button
-                                          onClick={() => handleArchiveTarget(target.id)}
-                                          className="text-yellow-600 hover:text-yellow-800 dark:text-yellow-400 dark:hover:text-yellow-300"
-                                        >
-                                          {target.archived ? '復元' : 'アーカイブ'}
-                                        </button>
-                                        <button
-                                          onClick={() => handleDeleteTarget(target.id)}
-                                          className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
-                                        >
-                                          削除
-                                        </button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                )}
-                              </Draggable>
-                            ))}
-                            {provided.placeholder}
+                    {filteredTargets.map((target, index) => (
+                      <th
+                        key={target.id}
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider border-r border-gray-200 dark:border-gray-600 min-w-[200px] w-[200px]"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="font-semibold text-gray-900 dark:text-gray-100">{target.name}</div>
+                            <div className="text-gray-400 dark:text-gray-500">{target.email}</div>
                           </div>
-                        </th>
-                      )}
-                    </Droppable>
+                          <div className="flex space-x-1">
+                            <button
+                              onClick={() => handleEditTarget(target)}
+                              className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-xs"
+                            >
+                              編集
+                            </button>
+                            <button
+                              onClick={() => handleArchiveTarget(target.id)}
+                              className="text-yellow-600 hover:text-yellow-800 dark:text-yellow-400 dark:hover:text-yellow-300 text-xs"
+                            >
+                              {target.archived ? '復元' : 'アーカイブ'}
+                            </button>
+                            <button
+                              onClick={() => handleDeleteTarget(target.id)}
+                              className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 text-xs"
+                            >
+                              削除
+                            </button>
+                          </div>
+                        </div>
+                      </th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                  <Droppable droppableId="stages" type="stage">
-                    {(provided) => (
-                      <div ref={provided.innerRef} {...provided.droppableProps}>
-                        {matrixData.stages.map((stage, index) => (
-                          <Draggable key={stage.id} draggableId={stage.id} index={index}>
-                            {(provided) => (
-                              <tr
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                className="hover:bg-gray-50 dark:hover:bg-gray-700"
-                              >
-                                <td
-                                  {...provided.dragHandleProps}
-                                  className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100 sticky left-0 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-600"
-                                >
-                                  <div className="flex items-center justify-between">
-                                    <span>{stage.name}</span>
-                                    <div className="flex space-x-1">
-                                      <button
-                                        onClick={() => handleEditStage(stage)}
-                                        className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
-                                      >
-                                        編集
-                                      </button>
-                                      <button
-                                        onClick={() => handleDeleteStage(stage.id)}
-                                        className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
-                                      >
-                                        削除
-                                      </button>
-                                    </div>
+                  {matrixData.stages.map((stage, index) => (
+                    <tr
+                      key={stage.id}
+                      className="hover:bg-gray-50 dark:hover:bg-gray-700"
+                    >
+                      <td
+                        className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100 sticky left-0 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-600 min-w-[200px] w-[200px]"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span>{stage.name}</span>
+                          <div className="flex space-x-1">
+                            <button
+                              onClick={() => handleEditStage(stage)}
+                              className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-xs"
+                            >
+                              編集
+                            </button>
+                            <button
+                              onClick={() => handleDeleteStage(stage.id)}
+                              className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 text-xs"
+                            >
+                              削除
+                            </button>
+                          </div>
+                        </div>
+                      </td>
+                      {filteredTargets.map((target) => {
+                        const taskKey = `${stage.id}-${target.id}`;
+                        const task = matrixData.tasks.find(t => t.stageId === stage.id && t.targetId === target.id);
+                        
+                        return (
+                          <td
+                            key={taskKey}
+                            className="px-6 py-4 border-r border-gray-200 dark:border-gray-600 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 min-w-[200px] w-[200px]"
+                            onClick={() => handleTaskEdit(stage.id, target.id)}
+                          >
+                            {task ? (
+                              <div className="space-y-2">
+                                <div className="flex items-center space-x-2">
+                                  <Badge variant={getStatusBadgeVariant(task.status)}>
+                                    {getStatusLabel(task.status)}
+                                  </Badge>
+                                  {task.dueDate && (
+                                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                                      {new Date(task.dueDate).toLocaleDateString('ja-JP')}
+                                    </span>
+                                  )}
+                                </div>
+                                {task.assignees.length > 0 && (
+                                  <div className="text-xs text-gray-600 dark:text-gray-300">
+                                    担当: {task.assignees.map((id: string) => 
+                                      matrixData.projectMembers.find((m: ProjectMember) => m.id === id)?.name
+                                    ).join(', ')}
                                   </div>
-                                </td>
-                                {filteredTargets.map((target) => {
-                                  const taskKey = `${stage.id}-${target.id}`;
-                                  const task = matrixData.tasks.find(t => t.stageId === stage.id && t.targetId === target.id);
-                                  
-                                  return (
-                                    <td
-                                      key={taskKey}
-                                      className="px-6 py-4 border-r border-gray-200 dark:border-gray-600 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 min-w-[200px] w-[200px]"
-                                      onClick={() => handleTaskEdit(stage.id, target.id)}
-                                    >
-                                      {task ? (
-                                        <div className="space-y-2">
-                                          <div className="flex items-center space-x-2">
-                                            <Badge variant={getStatusBadgeVariant(task.status)}>
-                                              {getStatusLabel(task.status)}
-                                            </Badge>
-                                            {task.dueDate && (
-                                              <span className="text-xs text-gray-500 dark:text-gray-400">
-                                                {new Date(task.dueDate).toLocaleDateString('ja-JP')}
-                                              </span>
-                                            )}
-                                          </div>
-                                          {task.assignees.length > 0 && (
-                                            <div className="text-xs text-gray-600 dark:text-gray-300">
-                                              担当: {task.assignees.map((id: string) => 
-                                                matrixData.projectMembers.find((m: ProjectMember) => m.id === id)?.name
-                                              ).join(', ')}
-                                            </div>
-                                          )}
-                                        </div>
-                                      ) : (
-                                        <div className="text-gray-400 dark:text-gray-500 text-sm">
-                                          クリックして編集
-                                        </div>
-                                      )}
-                                    </td>
-                                  );
-                                })}
-                              </tr>
+                                )}
+                              </div>
+                            ) : (
+                              <div className="text-gray-400 dark:text-gray-500 text-sm">
+                                クリックして編集
+                              </div>
                             )}
-                          </Draggable>
-                        ))}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
